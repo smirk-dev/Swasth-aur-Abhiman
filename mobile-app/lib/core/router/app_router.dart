@@ -13,36 +13,22 @@ import '../../features/events/presentation/screens/events_screen.dart';
 import '../../features/chat/presentation/screens/chat_list_screen.dart';
 import '../../features/admin/presentation/screens/admin_dashboard_screen.dart';
 
-class GoRouterNotifier extends ChangeNotifier {
-  final Ref _ref;
-
-  GoRouterNotifier(this._ref) {
-    _ref.listen(authProvider, (previous, next) {
-      notifyListeners();
-    });
-  }
-}
-
-final goRouterNotifierProvider = Provider<GoRouterNotifier>((ref) {
-  return GoRouterNotifier(ref);
-});
-
 final appRouterProvider = Provider<GoRouter>((ref) {
-  final notifier = ref.watch(goRouterNotifierProvider);
-
+  final authState = ref.watch(authProvider);
+  
   return GoRouter(
     initialLocation: '/login',
-    refreshListenable: notifier,
     redirect: (context, state) {
-      final authState = ref.read(authProvider);
       final isLoggedIn = authState.user != null;
       final isLoggingIn = state.matchedLocation == '/login' || 
                           state.matchedLocation == '/register';
 
+      // If not logged in and trying to access protected routes, redirect to login
       if (!isLoggedIn && !isLoggingIn) {
         return '/login';
       }
       
+      // If logged in and on auth screens, redirect to home
       if (isLoggedIn && isLoggingIn) {
         return '/home';
       }
