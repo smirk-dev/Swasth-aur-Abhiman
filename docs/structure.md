@@ -1,0 +1,7 @@
+### 📂 1. Project Directory Structure
+
+We will use a monorepo-style structure to keep everything organized.
+
+Plaintext
+
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   /swastha-aur-abhiman  ├── /backend (NestJS)  │   ├── /src  │   │   ├── /auth           # Authentication Module  │   │   ├── /users          # User Management Module  │   │   ├── /common         # Guards, Decorators (RBAC)  │   │   ├── app.module.ts  │   │   └── main.ts  │   ├── docker-compose.yml  # DB Setup  │   └── package.json  │  └── /mobile-app (Flutter)      ├── /lib      │   ├── /core           # API Clients, Constants      │   ├── /features      │   │   ├── /auth       # Login & Registration Screens      │   │   ├── /medical    # Health Tracking      │   │   └── /admin      # Dashboard      │   └── main.dart      └── pubspec.yaml   `
