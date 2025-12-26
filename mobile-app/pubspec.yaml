@@ -1,0 +1,73 @@
+name: swastha_aur_abhiman
+description: A comprehensive digital ecosystem for health, education, and training services
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # State Management
+  flutter_riverpod: ^2.4.9
+  
+  # Navigation
+  go_router: ^13.0.0
+  
+  # Networking
+  dio: ^5.4.0
+  retrofit: ^4.0.3
+  
+  # Local Storage
+  shared_preferences: ^2.2.2
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  
+  # UI Components
+  cupertino_icons: ^1.0.2
+  flutter_svg: ^2.0.9
+  cached_network_image: ^3.3.1
+  image_picker: ^1.0.7
+  file_picker: ^6.1.1
+  
+  # Video Player
+  video_player: ^2.8.2
+  chewie: ^1.7.4
+  
+  # PDF Viewer
+  flutter_pdfview: ^1.3.2
+  
+  # Charts
+  fl_chart: ^0.66.0
+  
+  # WebSocket for Chat
+  socket_io_client: ^2.0.3+1
+  
+  # Authentication
+  jwt_decoder: ^2.0.1
+  
+  # Utilities
+  intl: ^0.19.0
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.8.1
+  logger: ^2.0.2+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  build_runner: ^2.4.7
+  retrofit_generator: ^8.0.4
+  json_serializable: ^6.7.1
+  freezed: ^2.4.6
+  hive_generator: ^2.0.1
+
+flutter:
+  uses-material-design: true
+
+  # Uncomment and add assets as needed
+  # assets:
+  #   - assets/images/
+  #   - assets/icons/
