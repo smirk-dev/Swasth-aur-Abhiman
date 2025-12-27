@@ -866,6 +866,54 @@
       "languageVersion": "3.5"
     },
     {
+      "name": "url_launcher",
+      "rootUri": "file:///C:/Users/surya/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher-6.3.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "url_launcher_android",
+      "rootUri": "file:///C:/Users/surya/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_android-6.3.28",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "url_launcher_ios",
+      "rootUri": "file:///C:/Users/surya/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_ios-6.3.6",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "url_launcher_linux",
+      "rootUri": "file:///C:/Users/surya/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_linux-3.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
+      "name": "url_launcher_macos",
+      "rootUri": "file:///C:/Users/surya/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_macos-3.2.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "url_launcher_platform_interface",
+      "rootUri": "file:///C:/Users/surya/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_platform_interface-2.3.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "url_launcher_web",
+      "rootUri": "file:///C:/Users/surya/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_web-2.4.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "url_launcher_windows",
+      "rootUri": "file:///C:/Users/surya/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_windows-3.1.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
       "name": "uuid",
       "rootUri": "file:///C:/Users/surya/AppData/Local/Pub/Cache/hosted/pub.dev/uuid-4.5.2",
       "packageUri": "lib/",

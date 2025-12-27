@@ -23,7 +23,7 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen>
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(mediaProvider.notifier).loadByCategory('NUTRITION');
+      ref.read(mediaProvider.notifier).loadCategory('NUTRITION');
     });
   }
 
@@ -293,7 +293,7 @@ class _VideosTab extends ConsumerWidget {
             itemBuilder: (context, index) {
               final category = categories[index];
               final categoryContent = content
-                  .where((c) => c.subcategory == category.id)
+                  .where((c) => c.subCategory == category.id)
                   .toList();
               
               return NutritionCategoryCard(

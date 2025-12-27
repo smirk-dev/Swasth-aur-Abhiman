@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 part 'event_models.g.dart';
@@ -184,9 +185,4 @@ class EventType {
         return const Color(0xFF9E9E9E);
     }
   }
-}
-
-class IconData {
-  final int codePoint;
-  const IconData(this.codePoint);
 }

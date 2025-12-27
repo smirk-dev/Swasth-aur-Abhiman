@@ -60,11 +60,11 @@ class ContentItemCard extends StatelessWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.1),
+                        color: Colors.blue.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        content.contentType,
+                        content.category,
                         style: const TextStyle(
                           fontSize: 10,
                           color: Colors.blue,
@@ -97,7 +97,7 @@ class ContentItemCard extends StatelessWidget {
                     Icon(Icons.folder, size: 14, color: Colors.grey[500]),
                     const SizedBox(width: 4),
                     Text(
-                      content.subcategory ?? 'General',
+                      content.subCategory ?? 'General',
                       style: TextStyle(fontSize: 12, color: Colors.grey[500]),
                     ),
                     const Spacer(),
@@ -128,7 +128,7 @@ class ContentItemCard extends StatelessWidget {
   Widget _buildPlaceholder() {
     return Center(
       child: Icon(
-        content.contentType == 'VIDEO' ? Icons.videocam : Icons.insert_drive_file,
+        content.isVideo ? Icons.videocam : Icons.insert_drive_file,
         size: 48,
         color: Colors.grey[400],
       ),
