@@ -13,22 +13,27 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
 class AuthState {
   final User? user;
   final bool isLoading;
+  final bool isInitialized;
   final String? error;
 
   AuthState({
     this.user,
     this.isLoading = false,
+    this.isInitialized = false,
     this.error,
   });
 
   AuthState copyWith({
     User? user,
     bool? isLoading,
+    bool? isInitialized,
     String? error,
+    bool clearUser = false,
   }) {
     return AuthState(
-      user: user ?? this.user,
+      user: clearUser ? null : (user ?? this.user),
       isLoading: isLoading ?? this.isLoading,
+      isInitialized: isInitialized ?? this.isInitialized,
       error: error,
     );
   }
@@ -43,11 +48,20 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> _loadUser() async {
-    final token = await _storageService.getString(AppConstants.tokenKey);
-    final userData = await _storageService.getMap(AppConstants.userKey);
+    try {
+      final token = await _storageService.getString(AppConstants.tokenKey);
+      final userData = await _storageService.getMap(AppConstants.userKey);
 
-    if (token != null && userData != null) {
-      state = state.copyWith(user: User.fromJson(userData));
+      if (token != null && userData != null) {
+        state = state.copyWith(
+          user: User.fromJson(userData),
+          isInitialized: true,
+        );
+      } else {
+        state = state.copyWith(isInitialized: true);
+      }
+    } catch (e) {
+      state = state.copyWith(isInitialized: true);
     }
   }
 
@@ -100,7 +114,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> logout() async {
     await _storageService.remove(AppConstants.tokenKey);
     await _storageService.remove(AppConstants.userKey);
-    state = AuthState();
+    state = AuthState(isInitialized: true);
+  }
+
+  void clearError() {
+    state = state.copyWith(error: null);
   }
 }
 
