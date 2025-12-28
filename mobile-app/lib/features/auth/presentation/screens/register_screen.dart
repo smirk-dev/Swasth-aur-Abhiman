@@ -27,6 +27,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   Block _selectedBlock = Block.vikasnagar;
   bool _obscurePassword = true;
 
+  // Light blue color for selected role
+  static const Color _selectedRoleColor = Color(0xFFADD8E6);
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -60,7 +63,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     if (!mounted) return;
 
     if (success) {
-      // Navigate to home after successful registration
       context.go('/home');
     } else {
       final error = ref.read(authProvider).error;
@@ -73,192 +75,533 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     }
   }
 
+  String _getRoleDisplayName(UserRole role) {
+    switch (role) {
+      case UserRole.user:
+        return 'User';
+      case UserRole.admin:
+        return 'Admin';
+      case UserRole.doctor:
+        return 'Doctor';
+      case UserRole.trainer:
+        return 'Trainer';
+      case UserRole.teacher:
+        return 'Teacher';
+    }
+  }
+
+  String _getGenderDisplayName(Gender gender) {
+    switch (gender) {
+      case Gender.male:
+        return 'Male';
+      case Gender.female:
+        return 'Female';
+      case Gender.other:
+        return 'Other';
+    }
+  }
+
+  String _getBlockDisplayName(Block block) {
+    switch (block) {
+      case Block.vikasnagar:
+        return 'Vikasnagar';
+      case Block.doiwala:
+        return 'Doiwala';
+      case Block.sahaspur:
+        return 'Sahaspur';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Register'),
-      ),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Role Selection
-                Text('Select Role', style: Theme.of(context).textTheme.titleMedium),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 8,
-                  children: UserRole.values.map((role) {
-                    return ChoiceChip(
-                      label: Text(role.name.toUpperCase()),
-                      selected: _selectedRole == role,
-                      onSelected: (selected) {
-                        if (selected) {
-                          setState(() => _selectedRole = role);
-                        }
-                      },
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(height: 24),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 16),
 
-                // Full Name
-                TextFormField(
-                  controller: _fullNameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Full Name',
-                    prefixIcon: Icon(Icons.person),
-                  ),
-                  validator: (value) => value?.isEmpty ?? true ? 'Required' : null,
-                ),
-                const SizedBox(height: 16),
-
-                // Email
-                TextFormField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required';
-                    if (!value.contains('@')) return 'Invalid email';
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Password
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: _obscurePassword,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    prefixIcon: const Icon(Icons.lock),
-                    suffixIcon: IconButton(
-                      icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
-                      onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required';
-                    if (value.length < 6) return 'Min 6 characters';
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Gender
-                DropdownButtonFormField<Gender>(
-                  value: _selectedGender,
-                  decoration: const InputDecoration(
-                    labelText: 'Gender',
-                    prefixIcon: Icon(Icons.wc),
-                  ),
-                  items: Gender.values.map((gender) {
-                    return DropdownMenuItem(
-                      value: gender,
-                      child: Text(gender.name.toUpperCase()),
-                    );
-                  }).toList(),
-                  onChanged: (value) => setState(() => _selectedGender = value!),
-                ),
-                const SizedBox(height: 16),
-
-                // Phone Number
-                TextFormField(
-                  controller: _phoneController,
-                  keyboardType: TextInputType.phone,
-                  decoration: const InputDecoration(
-                    labelText: 'Phone Number (Optional)',
-                    prefixIcon: Icon(Icons.phone),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Block (for USER role)
-                if (_selectedRole == UserRole.user) ...[
-                  DropdownButtonFormField<Block>(
-                    value: _selectedBlock,
-                    decoration: const InputDecoration(
-                      labelText: 'Block',
-                      prefixIcon: Icon(Icons.location_on),
-                    ),
-                    items: Block.values.map((block) {
-                      return DropdownMenuItem(
-                        value: block,
-                        child: Text(block.name.toUpperCase()),
-                      );
-                    }).toList(),
-                    onChanged: (value) => setState(() => _selectedBlock = value!),
+                  // ========== HEADER SECTION ==========
+                  // Top Logos Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // UPES Logo (Left)
+                      _buildLogoPlaceholder(
+                        assetName: 'assets/images/upes_logo.png',
+                        fallbackText: 'UPES',
+                        width: 80,
+                        height: 50,
+                      ),
+                      // Government Logo (Right)
+                      _buildLogoPlaceholder(
+                        assetName: 'assets/images/gov_logo.png',
+                        fallbackText: 'DST',
+                        width: 80,
+                        height: 50,
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 16),
+
+                  // Page Title
+                  Text(
+                    'Community Covid Resilience\nResource Center',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey[800],
+                      height: 1.3,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20),
+
+                  // ========== BRANDING SECTION ==========
+                  // Main App Logo (Center) - Smaller for register screen
+                  Container(
+                    width: screenWidth * 0.3,
+                    height: screenWidth * 0.3,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.grey[300]!),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.asset(
+                        'assets/images/main_app_logo.png',
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Center(
+                            child: Icon(
+                              Icons.health_and_safety,
+                              size: 60,
+                              color: Colors.green[700],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Subtitle
+                  Text(
+                    'Swastha Aur Abhimaan',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[800],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
+
+                  // ========== REGISTER FORM ==========
+                  // Register Heading
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Register',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[900],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Role Selection Label
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Select your role',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Role Selection Pills
+                  _buildRoleSelector(),
+                  const SizedBox(height: 24),
+
+                  // Full Name Field
+                  _buildUnderlineTextField(
+                    controller: _fullNameController,
+                    label: 'Full Name',
+                    validator: (value) => value?.isEmpty ?? true ? 'Required' : null,
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Email Field
+                  _buildUnderlineTextField(
+                    controller: _emailController,
+                    label: 'Email',
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return 'Required';
+                      if (!value.contains('@')) return 'Invalid email';
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Password Field
                   TextFormField(
-                    controller: _addressController,
-                    decoration: const InputDecoration(
-                      labelText: 'Address (Optional)',
-                      prefixIcon: Icon(Icons.home),
+                    controller: _passwordController,
+                    obscureText: _obscurePassword,
+                    style: const TextStyle(fontSize: 16),
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      labelStyle: TextStyle(color: Colors.grey[600]),
+                      border: const UnderlineInputBorder(),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey[400]!),
+                      ),
+                      focusedBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 2),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                          color: Colors.grey[600],
+                        ),
+                        onPressed: () {
+                          setState(() => _obscurePassword = !_obscurePassword);
+                        },
+                      ),
                     ),
-                    maxLines: 2,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return 'Required';
+                      if (value.length < 6) return 'Min 6 characters';
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _ageController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: 'Age (Optional)',
-                      prefixIcon: Icon(Icons.cake),
+
+                  // Gender Selection Pills
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Gender',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey[700],
+                      ),
                     ),
                   ),
+                  const SizedBox(height: 8),
+                  _buildGenderSelector(),
                   const SizedBox(height: 16),
+
+                  // Phone Number
+                  _buildUnderlineTextField(
+                    controller: _phoneController,
+                    label: 'Phone Number (Optional)',
+                    keyboardType: TextInputType.phone,
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Block Selection (for USER role)
+                  if (_selectedRole == UserRole.user) ...[
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Select your block',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    _buildBlockSelector(),
+                    const SizedBox(height: 16),
+
+                    _buildUnderlineTextField(
+                      controller: _addressController,
+                      label: 'Address (Optional)',
+                    ),
+                    const SizedBox(height: 16),
+
+                    _buildUnderlineTextField(
+                      controller: _ageController,
+                      label: 'Age (Optional)',
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+
+                  // Specialization (for DOCTOR role)
+                  if (_selectedRole == UserRole.doctor) ...[
+                    _buildUnderlineTextField(
+                      controller: _specializationController,
+                      label: 'Specialization',
+                      validator: (value) => value?.isEmpty ?? true ? 'Required for doctors' : null,
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+
+                  const SizedBox(height: 24),
+
+                  // Register Button (Pill shape, black background)
+                  SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: ElevatedButton(
+                      onPressed: authState.isLoading ? null : _handleRegister,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                        disabledBackgroundColor: Colors.grey[400],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: authState.isLoading
+                          ? const SizedBox(
+                              height: 22,
+                              width: 22,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            )
+                          : const Text(
+                              'Register',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Login Link
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Already have an account? ",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => context.pop(),
+                        child: const Text(
+                          'Login Here',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 32),
                 ],
-
-                // Specialization (for DOCTOR role)
-                if (_selectedRole == UserRole.doctor) ...[
-                  TextFormField(
-                    controller: _specializationController,
-                    decoration: const InputDecoration(
-                      labelText: 'Specialization',
-                      prefixIcon: Icon(Icons.medical_services),
-                    ),
-                    validator: (value) => value?.isEmpty ?? true ? 'Required for doctors' : null,
-                  ),
-                  const SizedBox(height: 16),
-                ],
-
-                const SizedBox(height: 24),
-
-                // Register Button
-                ElevatedButton(
-                  onPressed: authState.isLoading ? null : _handleRegister,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: authState.isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Text('REGISTER'),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                TextButton(
-                  onPressed: () => context.pop(),
-                  child: const Text('Already have an account? Login'),
-                ),
-              ],
+              ),
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildLogoPlaceholder({
+    required String assetName,
+    required String fallbackText,
+    required double width,
+    required double height,
+  }) {
+    return SizedBox(
+      width: width,
+      height: height,
+      child: Image.asset(
+        assetName,
+        fit: BoxFit.contain,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Text(
+                fallbackText,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildUnderlineTextField({
+    required TextEditingController controller,
+    required String label,
+    TextInputType? keyboardType,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      style: const TextStyle(fontSize: 16),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: Colors.grey[600]),
+        border: const UnderlineInputBorder(),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey[400]!),
+        ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.black, width: 2),
+        ),
+        contentPadding: const EdgeInsets.symmetric(vertical: 12),
+      ),
+      validator: validator,
+    );
+  }
+
+  Widget _buildRoleSelector() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: UserRole.values.map((role) {
+          final isSelected = _selectedRole == role;
+          return Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: GestureDetector(
+              onTap: () {
+                setState(() => _selectedRole = role);
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                decoration: BoxDecoration(
+                  color: isSelected ? _selectedRoleColor : Colors.white,
+                  borderRadius: BorderRadius.circular(25),
+                  border: Border.all(
+                    color: isSelected ? _selectedRoleColor : Colors.grey[400]!,
+                    width: 1.5,
+                  ),
+                ),
+                child: Text(
+                  _getRoleDisplayName(role),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildGenderSelector() {
+    return Row(
+      children: Gender.values.map((gender) {
+        final isSelected = _selectedGender == gender;
+        return Padding(
+          padding: const EdgeInsets.only(right: 8),
+          child: GestureDetector(
+            onTap: () {
+              setState(() => _selectedGender = gender);
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              decoration: BoxDecoration(
+                color: isSelected ? _selectedRoleColor : Colors.white,
+                borderRadius: BorderRadius.circular(25),
+                border: Border.all(
+                  color: isSelected ? _selectedRoleColor : Colors.grey[400]!,
+                  width: 1.5,
+                ),
+              ),
+              child: Text(
+                _getGenderDisplayName(gender),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildBlockSelector() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: Block.values.map((block) {
+          final isSelected = _selectedBlock == block;
+          return Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: GestureDetector(
+              onTap: () {
+                setState(() => _selectedBlock = block);
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                decoration: BoxDecoration(
+                  color: isSelected ? _selectedRoleColor : Colors.white,
+                  borderRadius: BorderRadius.circular(25),
+                  border: Border.all(
+                    color: isSelected ? _selectedRoleColor : Colors.grey[400]!,
+                    width: 1.5,
+                  ),
+                ),
+                child: Text(
+                  _getBlockDisplayName(block),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }
