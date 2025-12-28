@@ -16,6 +16,8 @@ class AuthRepository {
       return AuthResponse.fromJson(response.data);
     } on DioException catch (e) {
       throw _handleError(e);
+    } catch (e) {
+      throw 'An unexpected error occurred. Please try again.';
     }
   }
 
@@ -29,17 +31,45 @@ class AuthRepository {
       return AuthResponse.fromJson(response.data);
     } on DioException catch (e) {
       throw _handleError(e);
+    } catch (e) {
+      throw 'An unexpected error occurred. Please try again.';
     }
   }
 
   String _handleError(DioException error) {
-    if (error.response != null) {
-      final message = error.response?.data['message'];
-      if (message is String) return message;
-      if (message is List) return message.first;
-      return 'An error occurred';
-    } else {
-      return 'Network error. Please check your connection.';
+    if (error.type == DioExceptionType.connectionTimeout ||
+        error.type == DioExceptionType.receiveTimeout ||
+        error.type == DioExceptionType.sendTimeout) {
+      return 'Connection timeout. Please check your internet connection.';
     }
+
+    if (error.type == DioExceptionType.connectionError) {
+      return 'Unable to connect to server. Please ensure the backend is running and try again.';
+    }
+
+    if (error.response != null) {
+      final statusCode = error.response?.statusCode;
+      final data = error.response?.data;
+
+      if (statusCode == 401) {
+        return 'Invalid email or password.';
+      }
+      if (statusCode == 409) {
+        return 'An account with this email already exists.';
+      }
+      if (statusCode == 400) {
+        final message = data?['message'];
+        if (message is String) return message;
+        if (message is List && message.isNotEmpty) return message.first.toString();
+        return 'Invalid request. Please check your input.';
+      }
+
+      final message = data?['message'];
+      if (message is String) return message;
+      if (message is List && message.isNotEmpty) return message.first.toString();
+      return 'Server error. Please try again later.';
+    }
+
+    return 'Network error. Please check your connection.';
   }
 }
