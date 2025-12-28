@@ -18,6 +18,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   UserRole _selectedRole = UserRole.user;
   bool _obscurePassword = true;
 
+  // Light blue color for selected role
+  static const Color _selectedRoleColor = Color(0xFFADD8E6);
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -37,7 +40,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (!mounted) return;
 
     if (success) {
-      // Navigate to home after successful login
       context.go('/home');
     } else {
       final error = ref.read(authProvider).error;
@@ -50,72 +52,165 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
+  String _getRoleDisplayName(UserRole role) {
+    switch (role) {
+      case UserRole.user:
+        return 'User';
+      case UserRole.admin:
+        return 'Admin';
+      case UserRole.doctor:
+        return 'Doctor';
+      case UserRole.trainer:
+        return 'Trainer';
+      case UserRole.teacher:
+        return 'Teacher';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Form(
               key: _formKey,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.health_and_safety,
-                    size: 80,
-                    color: Theme.of(context).primaryColor,
+                  const SizedBox(height: 16),
+
+                  // ========== HEADER SECTION ==========
+                  // Top Logos Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // UPES Logo (Left)
+                      _buildLogoPlaceholder(
+                        assetName: 'assets/images/upes_logo.png',
+                        fallbackText: 'UPES',
+                        width: 80,
+                        height: 50,
+                      ),
+                      // Government Logo (Right)
+                      _buildLogoPlaceholder(
+                        assetName: 'assets/images/gov_logo.png',
+                        fallbackText: 'DST',
+                        width: 80,
+                        height: 50,
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 16),
+
+                  // Page Title
                   Text(
-                    'Swastha Aur Abhiman',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColor,
-                        ),
+                    'Community Covid Resilience\nResource Center',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey[800],
+                      height: 1.3,
+                    ),
                     textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Health, Education & Training Platform',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 48),
-                  
-                  // Role Selection
-                  Text(
-                    'Select Your Role',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 12),
-                  Wrap(
-                    spacing: 8,
-                    children: UserRole.values.map((role) {
-                      return ChoiceChip(
-                        label: Text(role.name.toUpperCase()),
-                        selected: _selectedRole == role,
-                        onSelected: (selected) {
-                          if (selected) {
-                            setState(() => _selectedRole = role);
-                          }
-                        },
-                      );
-                    }).toList(),
                   ),
                   const SizedBox(height: 24),
 
-                  // Email Field
+                  // ========== BRANDING SECTION ==========
+                  // Main App Logo (Center)
+                  Container(
+                    width: screenWidth * 0.4,
+                    height: screenWidth * 0.4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.grey[300]!),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.asset(
+                        'assets/images/main_app_logo.png',
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Center(
+                            child: Icon(
+                              Icons.health_and_safety,
+                              size: 80,
+                              color: Colors.green[700],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Subtitle
+                  Text(
+                    'Swastha Aur Abhimaan',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[800],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 32),
+
+                  // ========== LOGIN FORM ==========
+                  // Login Heading
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Login',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[900],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Role Selection Label
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Select your role',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Role Selection Pills
+                  _buildRoleSelector(),
+                  const SizedBox(height: 28),
+
+                  // Email Field (Underline style)
                   TextFormField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
+                    style: const TextStyle(fontSize: 16),
+                    decoration: InputDecoration(
                       labelText: 'Email',
-                      prefixIcon: Icon(Icons.email),
+                      labelStyle: TextStyle(color: Colors.grey[600]),
+                      border: const UnderlineInputBorder(),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey[400]!),
+                      ),
+                      focusedBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 2),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -127,18 +222,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
 
-                  // Password Field
+                  // Password Field (Underline style)
                   TextFormField(
                     controller: _passwordController,
                     obscureText: _obscurePassword,
+                    style: const TextStyle(fontSize: 16),
                     decoration: InputDecoration(
                       labelText: 'Password',
-                      prefixIcon: const Icon(Icons.lock),
+                      labelStyle: TextStyle(color: Colors.grey[600]),
+                      border: const UnderlineInputBorder(),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey[400]!),
+                      ),
+                      focusedBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 2),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 12),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                          _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                          color: Colors.grey[600],
                         ),
                         onPressed: () {
                           setState(() => _obscurePassword = !_obscurePassword);
@@ -155,34 +260,147 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 32),
 
-                  // Login Button
-                  ElevatedButton(
-                    onPressed: authState.isLoading ? null : _handleLogin,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                  // Login Button (Pill shape, black background)
+                  SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: ElevatedButton(
+                      onPressed: authState.isLoading ? null : _handleLogin,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                        disabledBackgroundColor: Colors.grey[400],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        elevation: 0,
+                      ),
                       child: authState.isLoading
                           ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
+                              height: 22,
+                              width: 22,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
                             )
-                          : const Text('LOGIN'),
+                          : const Text(
+                              'Login',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
 
                   // Register Link
-                  TextButton(
-                    onPressed: () => context.push('/register'),
-                    child: const Text('Don\'t have an account? Register'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Don't have an account? ",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => context.push('/register'),
+                        child: const Text(
+                          'Register Here',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 32),
                 ],
               ),
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildLogoPlaceholder({
+    required String assetName,
+    required String fallbackText,
+    required double width,
+    required double height,
+  }) {
+    return SizedBox(
+      width: width,
+      height: height,
+      child: Image.asset(
+        assetName,
+        fit: BoxFit.contain,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Text(
+                fallbackText,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildRoleSelector() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: UserRole.values.map((role) {
+          final isSelected = _selectedRole == role;
+          return Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: GestureDetector(
+              onTap: () {
+                setState(() => _selectedRole = role);
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                decoration: BoxDecoration(
+                  color: isSelected ? _selectedRoleColor : Colors.white,
+                  borderRadius: BorderRadius.circular(25),
+                  border: Border.all(
+                    color: isSelected ? _selectedRoleColor : Colors.grey[400]!,
+                    width: 1.5,
+                  ),
+                ),
+                child: Text(
+                  _getRoleDisplayName(role),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }
