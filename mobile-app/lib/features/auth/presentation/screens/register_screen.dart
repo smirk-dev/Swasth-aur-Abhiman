@@ -43,16 +43,16 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     final request = RegisterRequest(
-      email: _emailController.text,
+      email: _emailController.text.trim(),
       password: _passwordController.text,
       role: _selectedRole.name.toUpperCase(),
-      fullName: _fullNameController.text,
+      fullName: _fullNameController.text.trim(),
       gender: _selectedGender.name.toUpperCase(),
-      phoneNumber: _phoneController.text.isNotEmpty ? _phoneController.text : null,
+      phoneNumber: _phoneController.text.isNotEmpty ? _phoneController.text.trim() : null,
       block: _selectedRole == UserRole.user ? _selectedBlock.name.toUpperCase() : null,
-      address: _addressController.text.isNotEmpty ? _addressController.text : null,
+      address: _addressController.text.isNotEmpty ? _addressController.text.trim() : null,
       age: _ageController.text.isNotEmpty ? int.tryParse(_ageController.text) : null,
-      specialization: _selectedRole == UserRole.doctor ? _specializationController.text : null,
+      specialization: _selectedRole == UserRole.doctor ? _specializationController.text.trim() : null,
     );
 
     final success = await ref.read(authProvider.notifier).register(request);
@@ -60,11 +60,15 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     if (!mounted) return;
 
     if (success) {
-      // Don't navigate - let the router redirect automatically
+      // Navigate to home after successful registration
+      context.go('/home');
     } else {
       final error = ref.read(authProvider).error;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error ?? 'Registration failed')),
+        SnackBar(
+          content: Text(error ?? 'Registration failed'),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }
