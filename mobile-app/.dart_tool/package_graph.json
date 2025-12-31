@@ -382,14 +382,6 @@
       ]
     },
     {
-      "name": "youtube_player_flutter",
-      "version": "8.1.2",
-      "dependencies": [
-        "flutter",
-        "flutter_inappwebview"
-      ]
-    },
-    {
       "name": "shimmer",
       "version": "3.0.0",
       "dependencies": [
@@ -1358,14 +1350,6 @@
       "dependencies": []
     },
     {
-      "name": "file",
-      "version": "7.0.1",
-      "dependencies": [
-        "meta",
-        "path"
-      ]
-    },
-    {
       "name": "share_plus_platform_interface",
       "version": "3.4.0",
       "dependencies": [
@@ -1399,13 +1383,6 @@
       "dependencies": [
         "flutter",
         "vector_math"
-      ]
-    },
-    {
-      "name": "flutter_inappwebview",
-      "version": "5.8.0",
-      "dependencies": [
-        "flutter"
       ]
     },
     {
@@ -1886,15 +1863,6 @@
       "version": "1.0.2",
       "dependencies": [
         "source_span"
-      ]
-    },
-    {
-      "name": "uuid",
-      "version": "4.5.2",
-      "dependencies": [
-        "crypto",
-        "fixnum",
-        "meta"
       ]
     },
     {
