@@ -177,12 +177,6 @@ class ChatNotifier extends StateNotifier<ChatState> {
       return false;
     }
   }
-        isSending: false,
-        error: e.toString(),
-      );
-      return false;
-    }
-  }
 
   Future<void> loadContacts({String? role}) async {
     try {

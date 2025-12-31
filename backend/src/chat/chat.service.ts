@@ -169,7 +169,6 @@ export class ChatService {
       name: user.fullName,
       role: user.role,
       email: user.email,
-      avatarUrl: user.userProfile?.avatarUrl || null,
       block: user.userProfile?.block || null,
       isOnline: false, // Can be tracked via websocket connections
     }));

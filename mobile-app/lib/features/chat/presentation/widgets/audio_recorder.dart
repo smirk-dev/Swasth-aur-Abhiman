@@ -1,26 +1,26 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:record/record.dart';
+import 'package:record/record.dart' as record_pkg;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class AudioRecorder extends StatefulWidget {
+class VoiceRecorder extends StatefulWidget {
   final Function(String path, int duration) onRecordingComplete;
   final VoidCallback onCancel;
 
-  const AudioRecorder({
+  const VoiceRecorder({
     super.key,
     required this.onRecordingComplete,
     required this.onCancel,
   });
 
   @override
-  State<AudioRecorder> createState() => _AudioRecorderState();
+  State<VoiceRecorder> createState() => _VoiceRecorderState();
 }
 
-class _AudioRecorderState extends State<AudioRecorder>
+class _VoiceRecorderState extends State<VoiceRecorder>
     with SingleTickerProviderStateMixin {
-  final AudioRecorder _recorder = AudioRecorder();
+  final record_pkg.AudioRecorder _recorder = record_pkg.AudioRecorder();
   bool _isRecording = false;
   int _recordingDuration = 0;
   Timer? _timer;
