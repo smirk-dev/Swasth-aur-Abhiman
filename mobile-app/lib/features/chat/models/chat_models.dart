@@ -212,7 +212,20 @@ class Message {
       'mediaUrl': mediaUrl,
       'createdAt': createdAt.toIso8601String(),
       'isRead': isRead,
+      'audioDuration': audioDuration,
     };
+  }
+
+  bool get isAudio => type == 'AUDIO';
+  bool get isImage => type == 'IMAGE';
+  bool get isFile => type == 'FILE';
+  bool get isText => type == 'TEXT';
+
+  String get formattedDuration {
+    if (audioDuration == null) return '0:00';
+    final minutes = audioDuration! ~/ 60;
+    final seconds = audioDuration! % 60;
+    return '$minutes:${seconds.toString().padLeft(2, '0')}';
   }
 }
 
