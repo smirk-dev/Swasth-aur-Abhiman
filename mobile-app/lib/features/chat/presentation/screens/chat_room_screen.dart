@@ -88,6 +88,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
           MessageInput(
             isSending: chatState.isSending,
             onSend: (message) => _sendMessage(message),
+            onSendAudio: (path, duration) => _sendAudioMessage(path, duration),
           ),
         ],
       ),
@@ -186,6 +187,23 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
 
   Future<void> _sendMessage(String content) async {
     await ref.read(chatProvider.notifier).sendMessage(widget.room.id, content);
+    
+    // Scroll to bottom after sending
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
+  Future<void> _sendAudioMessage(String path, int duration) async {
+    await ref.read(chatProvider.notifier).sendAudioMessage(
+      widget.room.id,
+      path,
+      duration,
+    );
     
     // Scroll to bottom after sending
     if (_scrollController.hasClients) {
