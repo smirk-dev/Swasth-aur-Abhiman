@@ -5,13 +5,10 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_windows
   file_selector_windows
-<<<<<<< HEAD
   share_plus
-=======
   flutter_inappwebview_windows
   permission_handler_windows
   record_windows
->>>>>>> 1dabcca4d7005775289baea63eedcf7c3dfe9168
   url_launcher_windows
 )
 

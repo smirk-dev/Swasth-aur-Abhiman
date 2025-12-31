@@ -11,11 +11,8 @@ import file_selector_macos
 import flutter_inappwebview_macos
 import package_info_plus
 import path_provider_foundation
-<<<<<<< HEAD
 import share_plus
-=======
 import record_darwin
->>>>>>> 1dabcca4d7005775289baea63eedcf7c3dfe9168
 import shared_preferences_foundation
 import sqflite_darwin
 import url_launcher_macos
@@ -29,11 +26,8 @@ func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   InAppWebViewFlutterPlugin.register(with: registry.registrar(forPlugin: "InAppWebViewFlutterPlugin"))
   FPPPackageInfoPlusPlugin.register(with: registry.registrar(forPlugin: "FPPPackageInfoPlusPlugin"))
   PathProviderPlugin.register(with: registry.registrar(forPlugin: "PathProviderPlugin"))
-<<<<<<< HEAD
   SharePlusMacosPlugin.register(with: registry.registrar(forPlugin: "SharePlusMacosPlugin"))
-=======
   RecordPlugin.register(with: registry.registrar(forPlugin: "RecordPlugin"))
->>>>>>> 1dabcca4d7005775289baea63eedcf7c3dfe9168
   SharedPreferencesPlugin.register(with: registry.registrar(forPlugin: "SharedPreferencesPlugin"))
   SqflitePlugin.register(with: registry.registrar(forPlugin: "SqflitePlugin"))
   UrlLauncherPlugin.register(with: registry.registrar(forPlugin: "UrlLauncherPlugin"))
