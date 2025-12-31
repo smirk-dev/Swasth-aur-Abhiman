@@ -35,8 +35,38 @@ export class MediaContent {
   @Column({ nullable: true })
   thumbnailUrl: string;
 
+  @Column({ type: 'varchar', length: 20, nullable: true })
+  source: string; // 'youtube', 'internal', 'vimeo'
+
+  @Column({ type: 'text', nullable: true })
+  externalUrl: string; // YouTube URL
+
   @Column({ default: 0 })
   viewCount: number;
+
+  @Column({ type: 'decimal', precision: 2, scale: 1, nullable: true })
+  rating: number; // 1.0 to 5.0
+
+  @Column({ type: 'varchar', length: 20, nullable: true })
+  difficulty: string; // 'Beginner', 'Intermediate', 'Advanced'
+
+  @Column({ type: 'varchar', length: 20, nullable: true })
+  ageGroup: string; // 'Class 1', 'Class 2', etc.
+
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  subject: string; // 'Mathematics', 'Science', etc.
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  chapter: string;
+
+  @Column({ type: 'varchar', length: 20, nullable: true })
+  language: string; // 'Hindi', 'English', 'Hinglish'
+
+  @Column({ type: 'integer', nullable: true })
+  durationSeconds: number;
+
+  @Column({ type: 'boolean', default: true })
+  isFree: boolean;
 
   @Column({ default: true })
   isActive: boolean;

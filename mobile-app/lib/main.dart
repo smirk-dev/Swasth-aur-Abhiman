@@ -26,7 +26,7 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp.router(
       title: 'Swastha Aur Abhiman',
-      theme: AppTheme.lightTheme,
+      theme: AppTheme.swasthLightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.light,
       routerConfig: router,

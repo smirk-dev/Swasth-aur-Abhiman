@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'design_system.dart';
+import 'app_colors.dart';
 
 /// Global App Theme implementing the Blue & Grey GOV design system.
 /// All colors and global components must follow the palette described in
@@ -166,6 +167,61 @@ class AppTheme {
       appBarTheme: AppBarTheme(
         backgroundColor: primaryColor,
         foregroundColor: DesignSystem.white,
+      ),
+    );
+  }
+
+  // Alternate Swasth Aur Abhiman theme as per design spec
+  static ThemeData get swasthLightTheme {
+    return ThemeData(
+      primaryColor: AppColors.medicalPrimary,
+      scaffoldBackgroundColor: AppColors.background,
+      fontFamily: 'Inter',
+
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: IconThemeData(color: AppColors.textPrimary),
+        titleTextStyle: TextStyle(
+          color: AppColors.textPrimary,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+
+      cardTheme: CardThemeData(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      ),
+
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          elevation: 0,
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          textStyle: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: Colors.grey[50],
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.medicalPrimary, width: 2),
+        ),
       ),
     );
   }

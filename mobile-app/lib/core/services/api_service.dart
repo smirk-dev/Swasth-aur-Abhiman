@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../network/dio_client.dart';
+import '../models/video.dart';
 
 class ApiService {
   final Dio _dio;
@@ -94,6 +95,49 @@ class ApiService {
         contentType: 'multipart/form-data',
       ),
     );
+  }
+
+  // Education video endpoints
+  Future<List<Video>> getVideosByClass(int classNumber) async {
+    final response = await _dio.get('/media/education/class/$classNumber');
+    return (response.data as List).map((e) => Video.fromJson(e)).toList();
+  }
+
+  Future<List<Video>> getVideosByClassAndSubject(int classNumber, String subject) async {
+    final response = await _dio.get('/media/education/class/$classNumber/subject/$subject');
+    return (response.data as List).map((e) => Video.fromJson(e)).toList();
+  }
+
+  Future<void> trackVideoView(int mediaId, int watchTime) async {
+    await _dio.post('/media/$mediaId/track-view', data: {
+      'userId': 1,
+      'watchTime': watchTime,
+    });
+  }
+
+  Future<void> rateVideo(int mediaId, double rating) async {
+    await _dio.post('/media/$mediaId/rate', data: {
+      'userId': 1,
+      'rating': rating,
+    });
+  }
+
+  Future<void> addBookmark(int mediaId, int timestamp, String? note) async {
+    await _dio.post('/media/$mediaId/bookmark', data: {
+      'userId': 1,
+      'timestamp': timestamp,
+      'note': note,
+    });
+  }
+
+  Future<List<Video>> getTrendingVideos() async {
+    final response = await _dio.get('/media/trending');
+    return (response.data as List).map((e) => Video.fromJson(e)).toList();
+  }
+
+  Future<List<Video>> getRecommendedVideos(int userId) async {
+    final response = await _dio.get('/media/recommended/$userId');
+    return (response.data as List).map((e) => Video.fromJson(e)).toList();
   }
 }
 

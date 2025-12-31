@@ -48,4 +48,59 @@ export class MediaController {
   async incrementViewCount(@Param('id') id: string) {
     return this.mediaService.incrementViewCount(id);
   }
+
+  @Get('education/class/:classNumber')
+  async getByClass(@Param('classNumber') classNumber: number) {
+    return this.mediaService.findByClass(Number(classNumber));
+  }
+
+  @Get('education/class/:classNumber/subject/:subject')
+  async getByClassAndSubject(
+    @Param('classNumber') classNumber: number,
+    @Param('subject') subject: string,
+  ) {
+    return this.mediaService.findByClassAndSubject(Number(classNumber), subject);
+  }
+
+  @Get('trending')
+  async getTrending() {
+    return this.mediaService.getTrending();
+  }
+
+  @Get('recommended/:userId')
+  async getRecommended(@Param('userId') userId: number) {
+    return this.mediaService.getRecommended(Number(userId));
+  }
+
+  @Post(':mediaId/track-view')
+  async trackView(
+    @Param('mediaId') mediaId: number,
+    @Body() data: { userId: number; watchTime: number },
+  ) {
+    return this.mediaService.trackView(Number(mediaId), data.userId, data.watchTime);
+  }
+
+  @Post(':mediaId/rate')
+  async rateVideo(
+    @Param('mediaId') mediaId: number,
+    @Body() data: { userId: number; rating: number },
+  ) {
+    return this.mediaService.rateVideo(Number(mediaId), data.userId, data.rating);
+  }
+
+  @Post(':mediaId/bookmark')
+  async addBookmark(
+    @Param('mediaId') mediaId: number,
+    @Body() data: { userId: number; timestamp: number; note?: string },
+  ) {
+    return this.mediaService.addBookmark(Number(mediaId), data);
+  }
+
+  @Get(':mediaId/bookmarks')
+  async getBookmarks(
+    @Param('mediaId') mediaId: number,
+    @Query('userId') userId: number,
+  ) {
+    return this.mediaService.getBookmarks(Number(mediaId), Number(userId));
+  }
 }
