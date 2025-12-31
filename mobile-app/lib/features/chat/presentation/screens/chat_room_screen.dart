@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/chat_models.dart';
 import '../../providers/chat_provider.dart';
+import '../../../auth/providers/auth_provider.dart';
 import '../widgets/message_bubble.dart';
 import '../widgets/message_input.dart';
 
