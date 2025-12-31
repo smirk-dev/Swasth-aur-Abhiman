@@ -138,6 +138,8 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
   }
 
   Widget _buildMessagesList(List<Message> messages) {
+    final currentUser = ref.watch(authProvider).user;
+    
     return ListView.builder(
       controller: _scrollController,
       reverse: true, // Latest messages at bottom
@@ -145,7 +147,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
       itemCount: messages.length,
       itemBuilder: (context, index) {
         final message = messages[index];
-        final isMe = _isMyMessage(message);
+        final isMe = currentUser != null && message.senderId == currentUser.id;
         final showAvatar = index == messages.length - 1 ||
             messages[index + 1].senderId != message.senderId;
 
@@ -178,12 +180,6 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
       default:
         return Colors.grey;
     }
-  }
-
-  bool _isMyMessage(Message message) {
-    // In production, compare with current user ID
-    // For now, assume odd indices are from current user
-    return false; // Placeholder
   }
 
   Future<void> _sendMessage(String content) async {
