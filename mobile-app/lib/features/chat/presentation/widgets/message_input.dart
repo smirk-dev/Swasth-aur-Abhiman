@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'audio_recorder.dart';
 
 class MessageInput extends StatefulWidget {
   final bool isSending;
   final Function(String) onSend;
+  final Function(String, int)? onSendAudio;
 
   const MessageInput({
     super.key,
     required this.isSending,
     required this.onSend,
+    this.onSendAudio,
   });
 
   @override
@@ -17,6 +20,7 @@ class MessageInput extends StatefulWidget {
 class _MessageInputState extends State<MessageInput> {
   final TextEditingController _controller = TextEditingController();
   bool _hasText = false;
+  bool _isRecording = false;
 
   @override
   void initState() {
@@ -34,6 +38,31 @@ class _MessageInputState extends State<MessageInput> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isRecording) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(0, -1),
+              blurRadius: 4,
+              color: Colors.black.withOpacity(0.05),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          child: VoiceRecorder(
+            onRecordingComplete: (path, duration) {
+              setState(() => _isRecording = false);
+              widget.onSendAudio?.call(path, duration);
+            },
+            onCancel: () => setState(() => _isRecording = false),
+          ),
+        ),
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
@@ -81,7 +110,7 @@ class _MessageInputState extends State<MessageInput> {
 
             const SizedBox(width: 8),
 
-            // Send button
+            // Send button or Microphone button
             AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               child: widget.isSending
@@ -96,15 +125,24 @@ class _MessageInputState extends State<MessageInput> {
                         ),
                       ),
                     )
-                  : IconButton(
-                      icon: Icon(
-                        Icons.send,
-                        color: _hasText
-                            ? Theme.of(context).primaryColor
-                            : Colors.grey[400],
-                      ),
-                      onPressed: _hasText ? _sendMessage : null,
-                    ),
+                  : _hasText
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.send,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          onPressed: _sendMessage,
+                        )
+                      : IconButton(
+                          icon: Icon(
+                            Icons.mic,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          onPressed: widget.onSendAudio != null
+                              ? () => setState(() => _isRecording = true)
+                              : null,
+                          tooltip: 'Send voice message',
+                        ),
             ),
           ],
         ),
@@ -155,6 +193,17 @@ class _MessageInputState extends State<MessageInput> {
                   onTap: () {
                     Navigator.pop(context);
                     // TODO: Implement camera
+                  },
+                ),
+                _AttachmentOption(
+                  icon: Icons.mic,
+                  label: 'Voice',
+                  color: Colors.orange,
+                  onTap: () {
+                    Navigator.pop(context);
+                    if (widget.onSendAudio != null) {
+                      setState(() => _isRecording = true);
+                    }
                   },
                 ),
                 _AttachmentOption(

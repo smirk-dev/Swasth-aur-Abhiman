@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../providers/teacher_provider.dart';
 
 class UploadContentScreen extends ConsumerStatefulWidget {
@@ -19,6 +20,8 @@ class _UploadContentScreenState extends ConsumerState<UploadContentScreen> {
   
   String _selectedCategory = 'Class 1-5';
   bool _isSubmitting = false;
+  String? _detectedThumbnailUrl;
+  bool _isValidYouTubeUrl = false;
 
   final _categories = [
     'Class 1-5',
@@ -30,12 +33,44 @@ class _UploadContentScreenState extends ConsumerState<UploadContentScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _videoUrlController.addListener(_onVideoUrlChanged);
+  }
+
+  @override
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
     _videoUrlController.dispose();
     _thumbnailUrlController.dispose();
     super.dispose();
+  }
+
+  void _onVideoUrlChanged() {
+    final url = _videoUrlController.text;
+    final videoId = _extractYoutubeVideoId(url);
+    
+    setState(() {
+      _isValidYouTubeUrl = videoId != null;
+      if (videoId != null) {
+        _detectedThumbnailUrl = 'https://img.youtube.com/vi/$videoId/mqdefault.jpg';
+      } else {
+        _detectedThumbnailUrl = null;
+      }
+    });
+  }
+
+  String? _extractYoutubeVideoId(String url) {
+    if (url.isEmpty) return null;
+    
+    final regExp = RegExp(
+      r'^.*(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/))([a-zA-Z0-9_-]{11}).*$',
+      caseSensitive: false,
+    );
+    
+    final match = regExp.firstMatch(url);
+    return match?.group(1);
   }
 
   @override
@@ -106,11 +141,14 @@ class _UploadContentScreenState extends ConsumerState<UploadContentScreen> {
             // Video URL
             TextFormField(
               controller: _videoUrlController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Video URL',
-                hintText: 'Enter YouTube or video URL',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.video_library),
+                hintText: 'Paste YouTube or video URL here',
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.video_library),
+                suffixIcon: _isValidYouTubeUrl
+                    ? const Icon(Icons.check_circle, color: Colors.green)
+                    : null,
               ),
               validator: (value) {
                 if (value?.isEmpty ?? true) {
@@ -119,17 +157,69 @@ class _UploadContentScreenState extends ConsumerState<UploadContentScreen> {
                 return null;
               },
             ),
+            const SizedBox(height: 8),
+            
+            // YouTube URL examples
+            Text(
+              'Supported: youtube.com/watch?v=..., youtu.be/..., youtube.com/shorts/...',
+              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+            ),
             const SizedBox(height: 16),
+
+            // Thumbnail Preview
+            if (_detectedThumbnailUrl != null || _thumbnailUrlController.text.isNotEmpty) ...[
+              const Text(
+                'Thumbnail Preview',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 8),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: CachedNetworkImage(
+                    imageUrl: _thumbnailUrlController.text.isNotEmpty
+                        ? _thumbnailUrlController.text
+                        : _detectedThumbnailUrl!,
+                    fit: BoxFit.cover,
+                    placeholder: (_, __) => Container(
+                      color: Colors.grey[200],
+                      child: const Center(child: CircularProgressIndicator()),
+                    ),
+                    errorWidget: (_, __, ___) => Container(
+                      color: Colors.grey[200],
+                      child: const Center(
+                        child: Icon(Icons.broken_image, size: 48, color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              if (_isValidYouTubeUrl && _thumbnailUrlController.text.isEmpty)
+                Row(
+                  children: [
+                    Icon(Icons.auto_awesome, size: 16, color: Colors.green[600]),
+                    const SizedBox(width: 4),
+                    Text(
+                      'YouTube thumbnail auto-detected',
+                      style: TextStyle(fontSize: 12, color: Colors.green[600]),
+                    ),
+                  ],
+                ),
+              const SizedBox(height: 16),
+            ],
 
             // Thumbnail URL (optional)
             TextFormField(
               controller: _thumbnailUrlController,
               decoration: const InputDecoration(
-                labelText: 'Thumbnail URL (optional)',
-                hintText: 'Enter thumbnail image URL',
+                labelText: 'Custom Thumbnail URL (optional)',
+                hintText: 'Leave empty to use YouTube thumbnail',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.image),
               ),
+              onChanged: (_) => setState(() {}),
             ),
             const SizedBox(height: 24),
 
