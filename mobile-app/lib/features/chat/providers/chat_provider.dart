@@ -150,6 +150,34 @@ class ChatNotifier extends StateNotifier<ChatState> {
     }
   }
 
+  Future<bool> sendAudioMessage(String roomId, String filePath, int duration) async {
+    state = state.copyWith(isSending: true);
+
+    try {
+      final message = await _repository.sendAudioMessage(roomId, filePath, duration);
+
+      if (message != null) {
+        final updatedMessages = Map<String, List<Message>>.from(state.messages);
+        updatedMessages[roomId] = [message, ...(updatedMessages[roomId] ?? [])];
+
+        state = state.copyWith(
+          messages: updatedMessages,
+          isSending: false,
+        );
+        return true;
+      }
+
+      state = state.copyWith(isSending: false);
+      return false;
+    } catch (e) {
+      state = state.copyWith(
+        isSending: false,
+        error: e.toString(),
+      );
+      return false;
+    }
+  }
+
   Future<void> loadContacts({String? role}) async {
     try {
       final contacts = await _repository.getAvailableContacts(role: role);
