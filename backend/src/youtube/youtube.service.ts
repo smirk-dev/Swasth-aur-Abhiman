@@ -26,7 +26,9 @@ export class YoutubeService {
     };
 
     try {
-      const response = await lastValueFrom(this.httpService.get(url, { params }));
+      const response = await lastValueFrom(
+        this.httpService.get<{ items: any[] }>(url, { params })
+      );
       return this.transformVideos(response.data.items);
     } catch (error) {
       this.logger.error('YouTube API error:', error);
