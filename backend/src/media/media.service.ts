@@ -56,7 +56,7 @@ export class MediaService {
     return this.mediaRepository.find({
       where: {
         ageGroup: `Class ${classNumber}`,
-        category: 'EDUCATION',
+        category: MediaCategory.EDUCATION,
       },
       order: { viewCount: 'DESC' },
     });
@@ -67,7 +67,7 @@ export class MediaService {
       where: {
         ageGroup: `Class ${classNumber}`,
         subject: subject,
-        category: 'EDUCATION',
+        category: MediaCategory.EDUCATION,
       },
       order: { createdAt: 'DESC' },
     });
