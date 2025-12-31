@@ -26,13 +26,7 @@ export class Message {
   content: string;
 
   @Column({ default: 'TEXT' })
-  type: string; // TEXT, IMAGE, AUDIO, FILE
-
-  @Column({ nullable: true })
-  mediaUrl: string;
-
-  @Column({ nullable: true, type: 'int' })
-  audioDuration: number; // Duration in seconds for audio messages
+  type: string; // TEXT or IMAGE
 
   @Column({ default: false })
   isRead: boolean;

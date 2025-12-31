@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/chat_models.dart';
 import 'package:intl/intl.dart';
-import 'audio_recorder.dart';
 
 class MessageBubble extends StatelessWidget {
   final Message message;
@@ -82,15 +81,6 @@ class MessageBubble extends StatelessWidget {
                       style: TextStyle(
                         color: isMe ? Colors.white : Colors.black87,
                         fontSize: 15,
-                      ),
-                    )
-                  else if (message.type == 'AUDIO')
-                    SizedBox(
-                      width: 200,
-                      child: AudioPlayerWidget(
-                        audioUrl: message.mediaUrl ?? '',
-                        duration: message.audioDuration,
-                        isMe: isMe,
                       ),
                     )
                   else if (message.type == 'IMAGE')

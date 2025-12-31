@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/chat_models.dart';
 import '../../providers/chat_provider.dart';
-import '../../../auth/providers/auth_provider.dart';
 import '../widgets/message_bubble.dart';
 import '../widgets/message_input.dart';
 
@@ -89,7 +88,6 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
           MessageInput(
             isSending: chatState.isSending,
             onSend: (message) => _sendMessage(message),
-            onSendAudio: (path, duration) => _sendAudioMessage(path, duration),
           ),
         ],
       ),
@@ -138,8 +136,6 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
   }
 
   Widget _buildMessagesList(List<Message> messages) {
-    final currentUser = ref.watch(authProvider).user;
-    
     return ListView.builder(
       controller: _scrollController,
       reverse: true, // Latest messages at bottom
@@ -147,7 +143,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
       itemCount: messages.length,
       itemBuilder: (context, index) {
         final message = messages[index];
-        final isMe = currentUser != null && message.senderId == currentUser.id;
+        final isMe = _isMyMessage(message);
         final showAvatar = index == messages.length - 1 ||
             messages[index + 1].senderId != message.senderId;
 
@@ -182,25 +178,14 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
     }
   }
 
-  Future<void> _sendMessage(String content) async {
-    await ref.read(chatProvider.notifier).sendMessage(widget.room.id, content);
-    
-    // Scroll to bottom after sending
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        0,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
-    }
+  bool _isMyMessage(Message message) {
+    // In production, compare with current user ID
+    // For now, assume odd indices are from current user
+    return false; // Placeholder
   }
 
-  Future<void> _sendAudioMessage(String path, int duration) async {
-    await ref.read(chatProvider.notifier).sendAudioMessage(
-      widget.room.id,
-      path,
-      duration,
-    );
+  Future<void> _sendMessage(String content) async {
+    await ref.read(chatProvider.notifier).sendMessage(widget.room.id, content);
     
     // Scroll to bottom after sending
     if (_scrollController.hasClients) {

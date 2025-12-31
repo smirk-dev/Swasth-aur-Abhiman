@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dio/dio.dart';
 import '../../../core/services/api_service.dart';
 import '../models/chat_models.dart';
 
@@ -35,7 +34,7 @@ class ChatRepository {
     }
   }
 
-  // Send a text message
+  // Send a message
   Future<Message?> sendMessage(String roomId, String content, {String type = 'TEXT'}) async {
     try {
       final response = await _apiService.post(
@@ -44,30 +43,6 @@ class ChatRepository {
           'content': content,
           'type': type,
         },
-      );
-      return Message.fromJson(response.data);
-    } catch (e) {
-      return null;
-    }
-  }
-
-  // Send an audio message
-  Future<Message?> sendAudioMessage(
-    String roomId, 
-    String filePath, 
-    int duration,
-  ) async {
-    try {
-      final formData = FormData.fromMap({
-        'type': 'AUDIO',
-        'content': 'Voice message',
-        'audioDuration': duration,
-        'audio': await MultipartFile.fromFile(filePath, filename: 'voice_message.m4a'),
-      });
-      
-      final response = await _apiService.post(
-        '/chat/rooms/$roomId/messages',
-        data: formData,
       );
       return Message.fromJson(response.data);
     } catch (e) {
@@ -96,7 +71,7 @@ class ChatRepository {
     }
   }
 
-  // Get available contacts (doctors, teachers, trainers, users)
+  // Get available contacts (doctors, teachers, trainers)
   Future<List<AvailableContact>> getAvailableContacts({String? role}) async {
     try {
       final queryParams = <String, String>{};
@@ -117,7 +92,7 @@ class ChatRepository {
   // Mark messages as read
   Future<void> markAsRead(String roomId) async {
     try {
-      await _apiService.patch('/chat/rooms/$roomId/read');
+      await _apiService.post('/chat/rooms/$roomId/read');
     } catch (e) {
       // Ignore errors
     }
