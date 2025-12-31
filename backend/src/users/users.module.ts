@@ -13,6 +13,3 @@ import { DoctorProfile } from './entities/doctor-profile.entity';
   exports: [UsersService],
 })
 export class UsersModule {}
-
-
-

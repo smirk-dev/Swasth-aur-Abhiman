@@ -18,11 +18,11 @@ import { MediaCategory } from '../common/enums/media.enum';
 import { User } from '../users/entities/user.entity';
 
 @Controller('media')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class MediaController {
   constructor(private mediaService: MediaService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   async createMedia(
     @Body() createMediaDto: CreateMediaDto,
@@ -81,7 +81,6 @@ export class MediaController {
   }
 
   @Post(':mediaId/rate')
-  @UseGuards(JwtAuthGuard)
   async rateVideo(
     @Param('mediaId') mediaId: number,
     @Body() data: { userId: number; rating: number },
@@ -90,7 +89,6 @@ export class MediaController {
   }
 
   @Post(':mediaId/bookmark')
-  @UseGuards(JwtAuthGuard)
   async addBookmark(
     @Param('mediaId') mediaId: number,
     @Body() data: { userId: number; timestamp: number; note?: string },
@@ -99,7 +97,6 @@ export class MediaController {
   }
 
   @Get(':mediaId/bookmarks')
-  @UseGuards(JwtAuthGuard)
   async getBookmarks(
     @Param('mediaId') mediaId: number,
     @Query('userId') userId: number,
