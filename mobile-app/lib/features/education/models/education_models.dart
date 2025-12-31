@@ -34,6 +34,9 @@ class EducationVideo extends HiveObject {
   @HiveField(9)
   final DateTime createdAt;
 
+  @HiveField(10)
+  final String? uploaderName;
+
   EducationVideo({
     required this.id,
     required this.title,
@@ -45,6 +48,7 @@ class EducationVideo extends HiveObject {
     this.viewCount,
     this.uploadedById,
     required this.createdAt,
+    this.uploaderName,
   });
 
   factory EducationVideo.fromJson(Map<String, dynamic> json) {
@@ -52,12 +56,13 @@ class EducationVideo extends HiveObject {
       id: json['id'],
       title: json['title'],
       description: json['description'],
-      url: json['url'],
+      url: json['url'] ?? json['mediaUrl'] ?? '',
       thumbnailUrl: json['thumbnailUrl'],
       category: json['category'] ?? 'EDUCATION',
-      subcategory: json['subcategory'],
+      subcategory: json['subcategory'] ?? json['subCategory'],
       viewCount: json['viewCount'] ?? 0,
       uploadedById: json['uploadedBy']?['id'],
+      uploaderName: json['uploadedBy']?['fullName'],
       createdAt: json['createdAt'] != null
           ? DateTime.parse(json['createdAt'])
           : DateTime.now(),
@@ -75,6 +80,38 @@ class EducationVideo extends HiveObject {
       'subcategory': subcategory,
       'viewCount': viewCount,
     };
+  }
+
+  /// Check if this is a YouTube video
+  bool get isYouTubeVideo {
+    return url.contains('youtube.com') || url.contains('youtu.be');
+  }
+
+  /// Extract YouTube video ID from URL
+  String? get youtubeVideoId {
+    if (!isYouTubeVideo) return null;
+    
+    final regExp = RegExp(
+      r'^.*(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/))([a-zA-Z0-9_-]{11}).*$',
+      caseSensitive: false,
+    );
+    
+    final match = regExp.firstMatch(url);
+    return match?.group(1);
+  }
+
+  /// Get YouTube thumbnail URL
+  String get effectiveThumbnailUrl {
+    if (thumbnailUrl != null && thumbnailUrl!.isNotEmpty) {
+      return thumbnailUrl!;
+    }
+    
+    final videoId = youtubeVideoId;
+    if (videoId != null) {
+      return 'https://img.youtube.com/vi/$videoId/mqdefault.jpg';
+    }
+    
+    return '';
   }
 }
 
