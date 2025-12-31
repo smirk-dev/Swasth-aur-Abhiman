@@ -157,7 +157,7 @@ class Message {
   final String content;
 
   @HiveField(5)
-  final String type; // TEXT, IMAGE, FILE
+  final String type; // TEXT, IMAGE, AUDIO, FILE
 
   @HiveField(6)
   final String? mediaUrl;
@@ -167,6 +167,9 @@ class Message {
 
   @HiveField(8)
   final bool isRead;
+
+  @HiveField(9)
+  final int? audioDuration; // Duration in seconds for audio messages
 
   Message({
     required this.id,
@@ -178,19 +181,23 @@ class Message {
     this.mediaUrl,
     required this.createdAt,
     this.isRead = false,
+    this.audioDuration,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
       id: json['id'],
-      roomId: json['roomId'],
-      senderId: json['senderId'],
-      senderName: json['senderName'],
-      content: json['content'],
+      roomId: json['roomId'] ?? json['room']?['id'] ?? '',
+      senderId: json['senderId'] ?? json['sender']?['id'] ?? '',
+      senderName: json['senderName'] ?? json['sender']?['fullName'] ?? 'Unknown',
+      content: json['content'] ?? '',
       type: json['type'] ?? 'TEXT',
       mediaUrl: json['mediaUrl'],
-      createdAt: DateTime.parse(json['createdAt']),
+      createdAt: json['createdAt'] != null 
+          ? DateTime.parse(json['createdAt']) 
+          : DateTime.now(),
       isRead: json['isRead'] ?? false,
+      audioDuration: json['audioDuration'],
     );
   }
 
