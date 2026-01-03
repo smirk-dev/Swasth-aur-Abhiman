@@ -21,6 +21,7 @@ class VoiceRecorder extends StatefulWidget {
 class _VoiceRecorderState extends State<VoiceRecorder>
     with SingleTickerProviderStateMixin {
   final record_pkg.AudioRecorder _recorder = record_pkg.AudioRecorder();
+  // ignore: unused_field
   bool _isRecording = false;
   int _recordingDuration = 0;
   Timer? _timer;

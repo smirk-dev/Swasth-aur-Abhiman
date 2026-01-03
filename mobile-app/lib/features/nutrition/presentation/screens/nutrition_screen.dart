@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fl_chart/fl_chart.dart';
 import '../../../../core/providers/media_provider.dart';
 import '../widgets/nutrition_category_card.dart';
 import '../widgets/nutrition_tips_section.dart';

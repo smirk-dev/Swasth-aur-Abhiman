@@ -576,6 +576,32 @@ class CurriculumData {
       // Additional Subjects
       'Physical Education': 'https://www.youtube.com/playlist?list=PL2hDszH4XLgW5pKU7Ec6nthuygZdteRiF',
       'Fine Arts': 'https://www.youtube.com/playlist?list=PLW6ZJtqCeoWstnN04GvB9IeA4P_mY5_Vj',
+    },
+
+    12: {
+      // Science Stream
+      'English': 'https://www.youtube.com/playlist?list=PL3s-GF0G43lRqpoBOB3WEp5A_C2V6OcFq',
+      'Physics': 'https://www.youtube.com/playlist?list=PLVLoWQFkZbhU6U0BhqGieiARjUYmyoa8p',
+      'Chemistry': 'https://www.youtube.com/playlist?list=PLVLoWQFkZbhVdStvLVoS3kU7RBaJR4JTR',
+      'Mathematics': 'https://www.youtube.com/playlist?list=PLVLoWQFkZbhW-2v8-Yidq3H6X7i99-m_A',
+      'Biology': 'https://www.youtube.com/playlist?list=PLPsaj0rTW2JOI_34IHOqv3Pi7dGoBZEj5',
+      'Computer Science': 'https://www.youtube.com/playlist?list=PLVLoWQFkZbhVVFPPzL8qk1YdcS35-l5u_',
+
+      // Commerce Stream
+      'Accountancy': 'https://www.youtube.com/playlist?list=PLVLoWQFkZbhWtF1CTYtmePxD-MvMW_158',
+      'Business Studies': 'https://www.youtube.com/playlist?list=PLVLoWQFkZbhWE-_sajacSj-q0dlH6U6cc',
+      'Economics': 'https://www.youtube.com/playlist?list=PLVLoWQFkZbhU-U2_929fUu6Kog55K-mSj',
+      'Informatics Practices': 'https://www.youtube.com/playlist?list=PLdFqKUpCmQ8pNbhKf84EajB5mcU7P9jvH',
+
+      // Arts Stream
+      'History': 'https://www.youtube.com/playlist?list=PL5Z7ZVj5DNVf6jt-TSK3n8BW1M23nJ1jA',
+      'Geography': 'https://www.youtube.com/playlist?list=PLVLoWQFkZbhW6m6_uH-RreM7VbI',
+      'Political Science': 'https://www.youtube.com/playlist?list=PLVLoWQFkZbhXum5pD97IJOVSSFzNRLPax',
+      'Sociology': 'https://www.youtube.com/playlist?list=PLVLoWQFkZbhVxyA3K-Ru0kuVTqhgqOJmO',
+
+      // Common Electives
+      'Physical Education': 'https://www.youtube.com/playlist?list=PL2hDszH4XLgW5pKU7Ec6nthuygZdteRiF',
+      'Psychology': 'https://www.youtube.com/playlist?list=PLPMPYhLl4LyoaaOZs4R0c8yoceHX1Blb5',
     }
   };
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/models/media_models.dart';
 import '../../../../core/providers/media_provider.dart';
 import '../widgets/skill_category_card.dart';
 import '../widgets/skill_content_screen.dart';

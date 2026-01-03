@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 // Models
 class NutritionPlan {
@@ -91,7 +92,7 @@ final todayMealsProvider = FutureProvider<({
 })>((ref) async {
   // TODO: Fetch from API /nutrition/logs/today
   return (
-    logs: [],
+    logs: <MealLog>[],
     totalCalories: 0,
     totalProtein: 0,
     totalCarbs: 0,
