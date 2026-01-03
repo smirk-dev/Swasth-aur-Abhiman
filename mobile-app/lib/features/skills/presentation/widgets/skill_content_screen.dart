@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/models/media_models.dart';
 import '../../../../core/providers/media_provider.dart';
+import '../../data/skill_playlists.dart';
 import 'video_player_screen.dart';
 
 class SkillContentScreen extends ConsumerStatefulWidget {
@@ -46,6 +48,8 @@ class _SkillContentScreenState extends ConsumerState<SkillContentScreen> {
   }
 
   Widget _buildEmptyState() {
+    final playlist = SkillPlaylists.getPlaylist(widget.categoryId) ?? SkillPlaylists.getPlaylist(widget.title);
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -62,6 +66,20 @@ class _SkillContentScreenState extends ConsumerState<SkillContentScreen> {
             style: TextStyle(color: Colors.grey[600]),
             textAlign: TextAlign.center,
           ),
+          const SizedBox(height: 16),
+          if (playlist != null)
+            ElevatedButton.icon(
+              onPressed: () async {
+                final uri = Uri.parse(playlist);
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Could not open playlist')));
+                }
+              },
+              icon: const Icon(Icons.playlist_play),
+              label: const Text('Open Playlist'),
+            ),
         ],
       ),
     );
