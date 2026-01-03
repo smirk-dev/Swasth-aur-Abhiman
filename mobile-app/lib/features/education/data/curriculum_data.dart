@@ -433,6 +433,49 @@ class CurriculumData {
       'Moral Science / Value Education': 'https://www.youtube.com/playlist?list=PLW6ZJtqCeoWstnN04GvB9IeA4P_mY5_Vj',
       // Computer Studies
       'Computer Studies': 'https://www.youtube.com/playlist?list=PL598I6QjK6X',
+    },
+
+    3: {
+      // English (Marigold / Santoor): 
+   'English': "https://www.youtube.com/playlist?list=PLVLoWQFkZbhW3_zO2fS_K-fU_7_m6"
+     // 2. Hindi (Rimjhim / Veena): 
+   'Hindi / Regional Language': "https://www.youtube.com/playlist?list=PLVLoWQFkZbhU8N-m-V93vBfB93f0M"
+     // 3. Mathematics (Math-Magic): 
+   'Mathematics': "https://www.youtube.com/playlist?list=PLVLoWQFkZbhX1DUx2RPfhk-n8e3Y05mhr"
+     // 4. Environmental Studies (EVS - Looking Around): 
+   'Environmental Studies (EVS)': "https://www.youtube.com/playlist?list=PLVLoWQFkZbhW_7w_88E_gR-w3R1-k"
+     // 5. General Knowledge (GK): 
+   'General Knowledge': "https://www.youtube.com/playlist?list=PLnCcvHTIyuPS_OyjYefDCEazz7ROCGCjH"
+     // 6. Art & Craft: 
+   'Art & Craft': "https://www.youtube.com/playlist?list=PLw7RjvenAfpZMnF3zGvlOeIvzzC8-1AF3"
+     // 7. Physical Education (K-3 Exercises): 
+   'Physical Education': "https://www.youtube.com/playlist?list=PL2hDszH4XLgW5pKU7Ec6nthuygZdteRiF"
+     // 8. Moral Science (Value Education): 
+   'Moral Science / Value Education': "https://www.youtube.com/playlist?list=PLW6ZJtqCeoWstnN04GvB9IeA4P_mY5_Vj"
+     // 9. Computer Studies (Basics): 
+   'Computer Studies': "https://www.youtube.com/playlist?list=PL598I6QjK6X"
+    },
+
+    4:{
+      //English (Marigold): 
+   'English': "https://www.youtube.com/playlist?list=PLsqi2UgTnk1Q368bb3-dQJ7AiH4tOTUym"
+      //Hindi (Rimjhim): 
+   'Hindi / Regional Language': "https://www.youtube.com/playlist?list=PLVLoWQFkZbhVUqGmD0KcynhMmVBby1Yiz"
+      //Mathematics (Math-Magic): 
+   'Mathematics': "https://www.youtube.com/playlist?list=PLVLoWQFkZbhUq-9AmpEqnvqE6-L9ah7KP"
+      //Environmental Studies (EVS - Looking Around): 
+   'Environmental Studies (EVS)': "https://www.youtube.com/playlist?list=PLVLoWQFkZbhV1v1W8L_67_8_U9"
+      //General Knowledge (GK): 
+   'General Knowledge': "https://www.youtube.com/watch?v=8pNk_aTr_YM"
+      //Art & Craft: 
+   'Art & Craft': "https://www.youtube.com/watch?v=IpYzvjETzOU"
+      //Physical Education (Yoga & Basic Motor Movements): 
+   'Physical Education': "https://www.youtube.com/watch?v=nS0UCpCanrM"
+      //Moral Science (Animated Values): 
+   'Moral Science / Value Education': "https://www.youtube.com/playlist?list=PLW6ZJtqCeoWstnN04GvB9IeA4P_mY5_Vj"
+      //Computer Studies: 
+   'Computer Studies': "https://www.youtube.com/playlist?list=PLW6ZJtqCeoWt5Tdj6KsQeqmn7m2YRHhVN"
+
     }
   };
 
