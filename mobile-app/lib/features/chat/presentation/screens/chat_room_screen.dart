@@ -142,12 +142,12 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
     
     return ListView.builder(
       controller: _scrollController,
-      reverse: true, // Latest messages at bottom
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       itemCount: messages.length,
       itemBuilder: (context, index) {
         final message = messages[index];
         final isMe = currentUser != null && message.senderId == currentUser.id;
+        // Show avatar if it's the last message or sender changes
         final showAvatar = index == messages.length - 1 ||
             messages[index + 1].senderId != message.senderId;
 
@@ -188,7 +188,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
     // Scroll to bottom after sending
     if (_scrollController.hasClients) {
       _scrollController.animateTo(
-        0,
+        _scrollController.position.maxScrollExtent,
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeOut,
       );
@@ -205,7 +205,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
     // Scroll to bottom after sending
     if (_scrollController.hasClients) {
       _scrollController.animateTo(
-        0,
+        _scrollController.position.maxScrollExtent,
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeOut,
       );

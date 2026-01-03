@@ -130,10 +130,36 @@ class ChatNotifier extends StateNotifier<ChatState> {
 
       if (message != null) {
         final updatedMessages = Map<String, List<Message>>.from(state.messages);
-        updatedMessages[roomId] = [message, ...(updatedMessages[roomId] ?? [])];
+        updatedMessages[roomId] = [...(updatedMessages[roomId] ?? []), message];
+
+        // Update room with last message and move to top
+        final updatedRooms = state.rooms.map((room) {
+          if (room.id == roomId) {
+            return ChatRoom(
+              id: room.id,
+              name: room.name,
+              description: room.description,
+              type: room.type,
+              participants: room.participants,
+              lastMessage: message,
+              unreadCount: room.unreadCount,
+              createdAt: room.createdAt,
+              updatedAt: DateTime.now(),
+            );
+          }
+          return room;
+        }).toList();
+
+        // Move the updated room to the top
+        updatedRooms.sort((a, b) {
+          final aTime = a.lastMessage?.createdAt ?? a.createdAt;
+          final bTime = b.lastMessage?.createdAt ?? b.createdAt;
+          return bTime.compareTo(aTime);
+        });
 
         state = state.copyWith(
           messages: updatedMessages,
+          rooms: updatedRooms,
           isSending: false,
         );
         return true;
@@ -158,10 +184,36 @@ class ChatNotifier extends StateNotifier<ChatState> {
 
       if (message != null) {
         final updatedMessages = Map<String, List<Message>>.from(state.messages);
-        updatedMessages[roomId] = [message, ...(updatedMessages[roomId] ?? [])];
+        updatedMessages[roomId] = [...(updatedMessages[roomId] ?? []), message];
+
+        // Update room with last message and move to top
+        final updatedRooms = state.rooms.map((room) {
+          if (room.id == roomId) {
+            return ChatRoom(
+              id: room.id,
+              name: room.name,
+              description: room.description,
+              type: room.type,
+              participants: room.participants,
+              lastMessage: message,
+              unreadCount: room.unreadCount,
+              createdAt: room.createdAt,
+              updatedAt: DateTime.now(),
+            );
+          }
+          return room;
+        }).toList();
+
+        // Move the updated room to the top
+        updatedRooms.sort((a, b) {
+          final aTime = a.lastMessage?.createdAt ?? a.createdAt;
+          final bTime = b.lastMessage?.createdAt ?? b.createdAt;
+          return bTime.compareTo(aTime);
+        });
 
         state = state.copyWith(
           messages: updatedMessages,
+          rooms: updatedRooms,
           isSending: false,
         );
         return true;
@@ -211,11 +263,11 @@ class ChatNotifier extends StateNotifier<ChatState> {
   void onNewMessage(Message message) {
     final updatedMessages = Map<String, List<Message>>.from(state.messages);
     updatedMessages[message.roomId] = [
+      ...(updatedMessages[message.roomId] ?? []),
       message,
-      ...(updatedMessages[message.roomId] ?? [])
     ];
 
-    // Update room's last message
+    // Update room's last message and reorder
     final updatedRooms = state.rooms.map((room) {
       if (room.id == message.roomId) {
         return ChatRoom(
@@ -234,6 +286,13 @@ class ChatNotifier extends StateNotifier<ChatState> {
       }
       return room;
     }).toList();
+
+    // Sort rooms to move the updated one to the top
+    updatedRooms.sort((a, b) {
+      final aTime = a.lastMessage?.createdAt ?? a.createdAt;
+      final bTime = b.lastMessage?.createdAt ?? b.createdAt;
+      return bTime.compareTo(aTime);
+    });
 
     state = state.copyWith(
       messages: updatedMessages,

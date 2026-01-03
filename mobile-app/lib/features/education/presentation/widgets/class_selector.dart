@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../data/curriculum_data.dart';
 
 class ClassSelector extends StatelessWidget {
   final int? selectedClass;
@@ -46,25 +47,21 @@ class ClassSelector extends StatelessWidget {
 
 class SubjectSelector extends StatelessWidget {
   final String? selectedSubject;
+  final int selectedClass;
   final Function(String?) onSubjectSelected;
 
   const SubjectSelector({
     super.key,
     required this.selectedSubject,
+    required this.selectedClass,
     required this.onSubjectSelected,
   });
 
-  static const subjects = [
-    'Mathematics',
-    'Science',
-    'English',
-    'Hindi',
-    'Social Science',
-    'EVS',
-  ];
-
   @override
   Widget build(BuildContext context) {
+    // Get subjects for the selected class
+    final subjects = CurriculumData.getSubjectsForClass(selectedClass);
+
     return Container(
       height: 50,
       padding: const EdgeInsets.symmetric(vertical: 4),

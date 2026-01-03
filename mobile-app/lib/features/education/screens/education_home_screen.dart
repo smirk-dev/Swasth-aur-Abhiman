@@ -4,6 +4,7 @@ import '../../../core/services/api_service.dart';
 import '../../../widgets/cards/education_card.dart';
 import '../../../core/models/video.dart';
 import 'video_player_screen.dart';
+import '../data/curriculum_data.dart';
 
 class EducationHomeScreen extends ConsumerStatefulWidget {
   const EducationHomeScreen({Key? key}) : super(key: key);
@@ -19,12 +20,21 @@ class _EducationHomeScreenState extends ConsumerState<EducationHomeScreen> {
   List<Video> videos = [];
   bool loading = false;
 
-  final subjects = ['All', 'Mathematics', 'Science', 'English', 'Hindi', 'Social Studies'];
+  late List<String> subjects;
 
   @override
   void initState() {
     super.initState();
+    _updateSubjects();
     _loadVideos();
+  }
+
+  void _updateSubjects() {
+    final classSubjects = CurriculumData.getSubjectsForClass(selectedClass);
+    setState(() {
+      subjects = ['All', ...classSubjects];
+      selectedSubject = 'All';
+    });
   }
 
   Future<void> _loadVideos() async {
@@ -42,6 +52,7 @@ class _EducationHomeScreenState extends ConsumerState<EducationHomeScreen> {
 
   void _onClassSelected(int classNumber) {
     setState(() => selectedClass = classNumber);
+    _updateSubjects();
     _loadVideos();
   }
 

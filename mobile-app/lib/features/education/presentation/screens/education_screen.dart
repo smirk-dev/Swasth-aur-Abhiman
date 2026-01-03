@@ -6,6 +6,7 @@ import '../widgets/class_selector.dart';
 import '../widgets/subject_card.dart';
 import '../widgets/education_content_list.dart';
 import '../widgets/pdf_viewer_screen.dart';
+import '../../data/curriculum_data.dart';
 
 class EducationScreen extends ConsumerStatefulWidget {
   const EducationScreen({super.key});
@@ -101,6 +102,7 @@ class _EducationScreenState extends ConsumerState<EducationScreen> {
           // Subject Selector (if class is selected)
           if (_selectedClass != null)
             SubjectSelector(
+              selectedClass: _selectedClass!,
               selectedSubject: _selectedSubject,
               onSubjectSelected: (subject) {
                 setState(() {
@@ -172,14 +174,10 @@ class _EducationScreenState extends ConsumerState<EducationScreen> {
   }
 
   Widget _buildSubjectGrid() {
-    final subjects = [
-      {'name': 'Mathematics', 'icon': Icons.calculate, 'color': Colors.blue},
-      {'name': 'Science', 'icon': Icons.science, 'color': Colors.green},
-      {'name': 'English', 'icon': Icons.menu_book, 'color': Colors.orange},
-      {'name': 'Hindi', 'icon': Icons.translate, 'color': Colors.red},
-      {'name': 'Social Science', 'icon': Icons.public, 'color': Colors.purple},
-      {'name': 'EVS', 'icon': Icons.eco, 'color': Colors.teal},
-    ];
+    if (_selectedClass == null) return const SizedBox.shrink();
+
+    // Get subjects for the selected class
+    final subjects = CurriculumData.getSubjectsForClass(_selectedClass!);
 
     return GridView.builder(
       padding: const EdgeInsets.all(16),
@@ -193,11 +191,11 @@ class _EducationScreenState extends ConsumerState<EducationScreen> {
       itemBuilder: (context, index) {
         final subject = subjects[index];
         return SubjectCard(
-          name: subject['name'] as String,
-          icon: subject['icon'] as IconData,
-          color: subject['color'] as Color,
+          name: subject,
+          icon: CurriculumData.getSubjectIcon(subject),
+          color: CurriculumData.getSubjectColor(subject),
           onTap: () {
-            setState(() => _selectedSubject = subject['name'] as String);
+            setState(() => _selectedSubject = subject);
           },
         );
       },

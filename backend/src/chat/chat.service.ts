@@ -42,21 +42,57 @@ export class ChatService {
         .getOne();
 
       if (existingRoom) {
-        return existingRoom;
+        return {
+          id: existingRoom.id,
+          name: existingRoom.name,
+          description: null,
+          type: existingRoom.type,
+          participants: participants.map(p => ({
+            id: p.id,
+            name: p.fullName,
+            role: p.role,
+            avatarUrl: null,
+            isOnline: false,
+          })),
+          lastMessage: null,
+          unreadCount: 0,
+          createdAt: existingRoom.createdAt.toISOString(),
+          updatedAt: null,
+        };
       }
     }
 
     const chatRoom = this.chatRoomRepository.create({
-      name,
+      name: name || (participantIds.length === 1 
+        ? participants.find(p => p.id === participantIds[0])?.fullName 
+        : 'Group Chat'),
       type: participantIds.length === 1 ? 'DIRECT' : 'GROUP',
       participants,
     });
 
-    return this.chatRoomRepository.save(chatRoom);
+    const savedRoom = await this.chatRoomRepository.save(chatRoom);
+
+    return {
+      id: savedRoom.id,
+      name: savedRoom.name,
+      description: null,
+      type: savedRoom.type,
+      participants: participants.map(p => ({
+        id: p.id,
+        name: p.fullName,
+        role: p.role,
+        avatarUrl: null,
+        isOnline: false,
+      })),
+      lastMessage: null,
+      unreadCount: 0,
+      createdAt: savedRoom.createdAt.toISOString(),
+      updatedAt: null,
+    };
   }
 
   async getUserChatRooms(userId: string) {
-    return this.chatRoomRepository
+    const rooms = await this.chatRoomRepository
       .createQueryBuilder('room')
       .leftJoinAndSelect('room.participants', 'participant')
       .leftJoinAndSelect('room.messages', 'message')
@@ -64,6 +100,38 @@ export class ChatService {
       .orderBy('room.lastMessageAt', 'DESC', 'NULLS LAST')
       .addOrderBy('room.createdAt', 'DESC')
       .getMany();
+
+    // Map rooms to include properly formatted data for the client
+    return rooms.map(room => ({
+      id: room.id,
+      name: room.name || room.participants.find(p => p.id !== userId)?.fullName || 'Chat',
+      description: null,
+      type: room.type,
+      participants: room.participants.map(p => ({
+        id: p.id,
+        name: p.fullName,
+        role: p.role,
+        avatarUrl: null,
+        isOnline: false,
+      })),
+      lastMessage: room.messages && room.messages.length > 0
+        ? {
+            id: room.messages[room.messages.length - 1].id,
+            roomId: room.id,
+            senderId: room.messages[room.messages.length - 1].sender?.id,
+            senderName: room.messages[room.messages.length - 1].sender?.fullName,
+            content: room.messages[room.messages.length - 1].content,
+            type: room.messages[room.messages.length - 1].type || 'TEXT',
+            mediaUrl: room.messages[room.messages.length - 1].mediaUrl,
+            createdAt: room.messages[room.messages.length - 1].createdAt.toISOString(),
+            isRead: room.messages[room.messages.length - 1].isRead,
+            audioDuration: room.messages[room.messages.length - 1].audioDuration,
+          }
+        : null,
+      unreadCount: 0,
+      createdAt: room.createdAt.toISOString(),
+      updatedAt: room.lastMessageAt?.toISOString(),
+    }));
   }
 
   async sendMessage(sendMessageDto: SendMessageDto, sender: User) {
@@ -102,15 +170,15 @@ export class ChatService {
     // Return message with additional fields for the client
     return {
       id: savedMessage.id,
-      roomId: room.id,
+      roomId: roomId,
       senderId: sender.id,
       senderName: sender.fullName,
       content: savedMessage.content,
-      type: savedMessage.type,
+      type: savedMessage.type || 'TEXT',
       mediaUrl: savedMessage.mediaUrl,
       audioDuration: savedMessage.audioDuration,
       isRead: savedMessage.isRead,
-      createdAt: savedMessage.createdAt,
+      createdAt: savedMessage.createdAt.toISOString(),
     };
   }
 
@@ -130,11 +198,25 @@ export class ChatService {
       throw new NotFoundException('You are not a participant of this chat room');
     }
 
-    return this.messageRepository.find({
+    const messages = await this.messageRepository.find({
       where: { room: { id: roomId } },
       relations: ['sender'],
       order: { createdAt: 'ASC' },
     });
+
+    // Map messages to include all required fields for the client
+    return messages.map(msg => ({
+      id: msg.id,
+      roomId: roomId,
+      senderId: msg.sender.id,
+      senderName: msg.sender.fullName,
+      content: msg.content,
+      type: msg.type || 'TEXT',
+      mediaUrl: msg.mediaUrl,
+      audioDuration: msg.audioDuration,
+      isRead: msg.isRead,
+      createdAt: msg.createdAt.toISOString(),
+    }));
   }
 
   async markMessagesAsRead(roomId: string, userId: string) {

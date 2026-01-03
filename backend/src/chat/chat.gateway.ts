@@ -75,15 +75,19 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     // In a real app, validate user from JWT token in socket handshake
     const sender = { id: data.senderId } as any;
     
-    const message = await this.chatService.sendMessage(
-      { roomId: data.roomId, content: data.content, type: data.type },
-      sender,
-    );
+    try {
+      const message = await this.chatService.sendMessage(
+        { roomId: data.roomId, content: data.content, type: data.type },
+        sender,
+      );
 
-    // Broadcast message to room
-    this.server.to(data.roomId).emit('newMessage', message);
+      // Broadcast message to room with all required fields
+      this.server.to(data.roomId).emit('newMessage', message);
 
-    return { status: 'sent', message };
+      return { status: 'sent', message };
+    } catch (error) {
+      return { status: 'error', message: error.message };
+    }
   }
 
   @SubscribeMessage('typing')
