@@ -1,0 +1,134 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 60
+      arrivalRate: 10
+      name: 'Warm up'
+    - duration: 120
+      arrivalRate: 50
+      name: 'Ramp up load'
+    - duration: 180
+      arrivalRate: 100
+      name: 'Sustained load'
+    - duration: 60
+      arrivalRate: 200
+      name: 'Spike test'
+  processor: './load-test-processor.js'
+
+scenarios:
+  - name: 'User Authentication Flow'
+    weight: 30
+    flow:
+      - post:
+          url: '/auth/register'
+          json:
+            email: '{{ $randomEmail() }}'
+            password: 'TestPassword123!'
+            fullName: '{{ $randomString() }}'
+            phone: '{{ $randomNumber(10) }}'
+            role: 'USER'
+          capture:
+            - json: '$.accessToken'
+              as: 'authToken'
+      - think: 2
+      - post:
+          url: '/auth/login'
+          json:
+            email: '{{ email }}'
+            password: 'TestPassword123!'
+      - get:
+          url: '/auth/profile'
+          headers:
+            Authorization: 'Bearer {{ authToken }}'
+
+  - name: 'Health Metrics Recording'
+    weight: 25
+    flow:
+      - post:
+          url: '/auth/login'
+          json:
+            email: 'test@example.com'
+            password: 'TestPassword123!'
+          capture:
+            - json: '$.accessToken'
+              as: 'token'
+      - post:
+          url: '/health/metrics'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            metricType: 'BLOOD_SUGAR'
+            value: '{{ $randomNumber(70, 140) }}'
+            unit: 'mg/dL'
+      - get:
+          url: '/health/metrics'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+      - get:
+          url: '/health/summary'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: 'Content Browsing'
+    weight: 20
+    flow:
+      - get:
+          url: '/education/videos'
+          qs:
+            page: 1
+            limit: 20
+      - think: 3
+      - get:
+          url: '/skills/training-modules'
+          qs:
+            page: 1
+            limit: 10
+      - think: 2
+      - get:
+          url: '/nutrition/recipes'
+          qs:
+            page: 1
+            limit: 15
+
+  - name: 'Doctor Consultation'
+    weight: 15
+    flow:
+      - post:
+          url: '/auth/login'
+          json:
+            email: 'doctor@example.com'
+            password: 'DoctorPass123!'
+          capture:
+            - json: '$.accessToken'
+              as: 'doctorToken'
+      - get:
+          url: '/doctor/appointments'
+          headers:
+            Authorization: 'Bearer {{ doctorToken }}'
+      - get:
+          url: '/doctor/patients'
+          headers:
+            Authorization: 'Bearer {{ doctorToken }}'
+
+  - name: 'Admin Operations'
+    weight: 10
+    flow:
+      - post:
+          url: '/auth/login'
+          json:
+            email: 'admin@example.com'
+            password: 'AdminPass123!'
+          capture:
+            - json: '$.accessToken'
+              as: 'adminToken'
+      - get:
+          url: '/admin/users'
+          headers:
+            Authorization: 'Bearer {{ adminToken }}'
+          qs:
+            page: 1
+            limit: 50
+      - get:
+          url: '/admin/analytics/overview'
+          headers:
+            Authorization: 'Bearer {{ adminToken }}'

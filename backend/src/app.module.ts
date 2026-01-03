@@ -1,6 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+import { CacheModule } from '@nestjs/cache-manager';
+import * as redisStore from 'cache-manager-redis-store';
+import { TerminusModule } from '@nestjs/terminus';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { MediaModule } from './media/media.module';
@@ -15,6 +20,9 @@ import { DoctorModule } from './doctor/doctor.module';
 import { SkillsModule } from './skills/skills.module';
 import { NutritionModule } from './nutrition/nutrition.module';
 import { NotificationModule } from './notifications/notifications.module';
+import { LoggingMiddleware } from './common/middleware/logging.middleware';
+import { LoggerService } from './common/logger/logger.service';
+import { HealthCheckController } from './health/health-check.controller';
 
 @Module({
   imports: [
@@ -23,6 +31,42 @@ import { NotificationModule } from './notifications/notifications.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
+
+    // Rate Limiting
+    ThrottlerModule.forRoot([
+      {
+        name: 'short',
+        ttl: 1000,
+        limit: 10, // 10 requests per second
+      },
+      {
+        name: 'medium',
+        ttl: 10000,
+        limit: 100, // 100 requests per 10 seconds
+      },
+      {
+        name: 'long',
+        ttl: 60000,
+        limit: 500, // 500 requests per minute
+      },
+    ]),
+
+    // Redis Caching
+    CacheModule.registerAsync({
+      isGlobal: true,
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        store: redisStore,
+        host: configService.get('REDIS_HOST', 'localhost'),
+        port: configService.get('REDIS_PORT', 6379),
+        ttl: 300, // 5 minutes default
+        max: 100, // maximum number of items in cache
+      }),
+    }),
+
+    // Health Checks
+    TerminusModule,
 
     // Database Module
     TypeOrmModule.forRootAsync({
@@ -38,6 +82,12 @@ import { NotificationModule } from './notifications/notifications.module';
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: configService.get('NODE_ENV') === 'development', // Set to false in production
         logging: configService.get('NODE_ENV') === 'development',
+        // Performance optimizations
+        extra: {
+          max: 20, // max number of clients in the pool
+          idleTimeoutMillis: 30000,
+          connectionTimeoutMillis: 2000,
+        },
       }),
     }),
 
@@ -57,5 +107,19 @@ import { NotificationModule } from './notifications/notifications.module';
     NutritionModule,
     NotificationModule,
   ],
+  controllers: [HealthCheckController],
+  providers: [
+    LoggerService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggingMiddleware)
+      .forRoutes('*');
+  }
+}
