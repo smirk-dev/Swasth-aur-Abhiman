@@ -43,7 +43,7 @@ dependencies:
   youtube_player_flutter: ^9.1.3
   
   # Audio Recording & Playback
-  record: ^5.1.2
+  record: ^6.1.2
   audioplayers: ^6.1.0
   path_provider: ^2.1.2
   permission_handler: ^11.3.1
