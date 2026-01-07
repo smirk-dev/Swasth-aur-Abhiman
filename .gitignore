@@ -34,7 +34,6 @@ mobile-app/.flutter-plugins-dependencies
 mobile-app/.packages
 mobile-app/.pub-cache/
 mobile-app/.pub/
-mobile-app/build/
 mobile-app/.idea/
 mobile-app/*.iml
 mobile-app/.metadata
