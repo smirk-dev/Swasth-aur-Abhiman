@@ -112,6 +112,44 @@ swasth-aur-abhiman/
 - ✅ **Nutrition Screen**: Browse diet plans and recipes
 - ✅ **Skills Hub Screen**: Enroll and track skill training progress
 
+## 📸 Screenshot Checklist
+
+Save all captures in the repo under `assets/screenshots/` so they travel with the codebase.
+
+- **Admin Dashboard (React)** — place files in `assets/screenshots/admin-dashboard/`
+   - Login: ![Admin - Login](assets/screenshots/admin-dashboard/login.png)
+   - Dashboard overview (stats/charts): ![Admin - Dashboard](assets/screenshots/admin-dashboard/dashboard.png)
+   - File upload flow: ![Admin - File Upload](assets/screenshots/admin-dashboard/file-upload.png)
+   - Content management table: ![Admin - Content Management](assets/screenshots/admin-dashboard/content-management.png)
+   - User management: ![Admin - User Management](assets/screenshots/admin-dashboard/user-management.png)
+   - Storage/settings panel: ![Admin - Settings](assets/screenshots/admin-dashboard/settings.png)
+
+- **Mobile App (Flutter)** — place files in `assets/screenshots/mobile-app/`
+   - Login: ![Mobile - Login](assets/screenshots/mobile-app/login.png)
+   - Register: ![Mobile - Register](assets/screenshots/mobile-app/register.png)
+   - Home dashboard: ![Mobile - Home](assets/screenshots/mobile-app/home.png)
+   - Medical dashboard: ![Mobile - Medical](assets/screenshots/mobile-app/medical.png)
+   - Health metrics details: ![Mobile - Health Metrics](assets/screenshots/mobile-app/health-metrics.png)
+   - Prescriptions list: ![Mobile - Prescriptions](assets/screenshots/mobile-app/prescriptions.png)
+   - Upload prescription flow: ![Mobile - Upload Prescription](assets/screenshots/mobile-app/upload-prescription.png)
+   - Education hub: ![Mobile - Education](assets/screenshots/mobile-app/education.png)
+   - PDF/video lesson view: ![Mobile - Education Content](assets/screenshots/mobile-app/education-content.png)
+   - Skills hub: ![Mobile - Skills Hub](assets/screenshots/mobile-app/skills-hub.png)
+   - Skill category list: ![Mobile - Skill Category](assets/screenshots/mobile-app/skill-category.png)
+   - Skill content/video player: ![Mobile - Skill Content](assets/screenshots/mobile-app/skill-content.png)
+   - Nutrition hub: ![Mobile - Nutrition](assets/screenshots/mobile-app/nutrition.png)
+   - Nutrition detail/video: ![Mobile - Nutrition Content](assets/screenshots/mobile-app/nutrition-content.png)
+   - Events list: ![Mobile - Events](assets/screenshots/mobile-app/events.png)
+   - Event detail: ![Mobile - Event Detail](assets/screenshots/mobile-app/event-detail.png)
+   - Chat list: ![Mobile - Chat List](assets/screenshots/mobile-app/chat-list.png)
+   - Notifications: ![Mobile - Notifications](assets/screenshots/mobile-app/notifications.png)
+   - Admin dashboard: ![Mobile - Admin Dashboard](assets/screenshots/mobile-app/admin-dashboard.png)
+   - Doctor dashboard: ![Mobile - Doctor Dashboard](assets/screenshots/mobile-app/doctor-dashboard.png)
+   - Teacher dashboard: ![Mobile - Teacher Dashboard](assets/screenshots/mobile-app/teacher-dashboard.png)
+   - Trainer dashboard: ![Mobile - Trainer Dashboard](assets/screenshots/mobile-app/trainer-dashboard.png)
+
+Tip: keep filenames kebab-case (as above) and capture one image per bullet so broken links make it obvious what still needs a screenshot.
+
 ### Database & Architecture
 - ✅ **32+ Entity Models**: Complete database schema implementation
 - ✅ **TypeORM Integration**: Full ORM setup with migrations
@@ -1497,7 +1535,61 @@ static const String wsUrl = 'http://localhost:3000';
 - **Permission denied**: Check file/directory permissions for uploads folder
 - **S3 access denied**: Verify IAM permissions and bucket policy
 
-## 📄 License
+## � Screenshots
+
+![](assets/Screenshot%202026-01-14%20185311.png)
+
+![](assets/Screenshot%202026-01-14%20185406.png)
+
+![](assets/Screenshot%202026-01-14%20185430.png)
+
+![](assets/Screenshot%202026-01-14%20185458.png)
+
+![](assets/Screenshot%202026-01-14%20185602.png)
+
+![](assets/Screenshot%202026-01-14%20185701.png)
+
+![](assets/Screenshot%202026-01-14%20185721.png)
+
+![](assets/Screenshot%202026-01-14%20185804.png)
+
+![](assets/Screenshot%202026-01-14%20185835.png)
+
+![](assets/Screenshot%202026-01-14%20185850.png)
+
+![](assets/Screenshot%202026-01-14%20185942.png)
+
+![](assets/Screenshot%202026-01-14%20190019.png)
+
+![](assets/Screenshot%202026-01-14%20190035.png)
+
+![](assets/Screenshot%202026-01-14%20190114.png)
+
+![](assets/Screenshot%202026-01-14%20190138.png)
+
+![](assets/Screenshot%202026-01-14%20190153.png)
+
+![](assets/Screenshot%202026-01-14%20190205.png)
+
+![](assets/Screenshot%202026-01-14%20190244.png)
+
+![](assets/Screenshot%202026-01-14%20190258.png)
+
+![](assets/Screenshot%202026-01-14%20190316.png)
+
+![](assets/Screenshot%202026-01-14%20190328.png)
+
+![](assets/Screenshot%202026-01-14%20190344.png)
+
+![](assets/Screenshot%202026-01-14%20190433.png)
+
+![](assets/Screenshot%202026-01-14%20190523.png)
+
+![](assets/Screenshot%202026-01-14%20190657.png)
+
+![](assets/Screenshot%202026-01-14%20190812.png)
+
+## �📄 License
 
 This project is licensed under UNLICENSED.
 
