@@ -89,10 +89,11 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   const port = configService.get<number>('PORT') || 3000;
-  await app.listen(port);
+  const host = configService.get<string>('HOST') || '0.0.0.0';
+  await app.listen(port, host);
   
-  logger.log(`🚀 Swastha Aur Abhiman Backend running on: http://localhost:${port}/api`, 'Bootstrap');
-  logger.log(`📊 Health check available at: http://localhost:${port}/health-check`, 'Bootstrap');
+  logger.log(`🚀 Swastha Aur Abhiman Backend running on: http://${host}:${port}/api`, 'Bootstrap');
+  logger.log(`📊 Health check available at: http://${host}:${port}/health-check`, 'Bootstrap');
   logger.log(`Environment: ${configService.get('NODE_ENV') || 'development'}`, 'Bootstrap');
 }
 
