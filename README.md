@@ -112,39 +112,63 @@ swasth-aur-abhiman/
 - ✅ **Nutrition Screen**: Browse diet plans and recipes
 - ✅ **Skills Hub Screen**: Enroll and track skill training progress
 
-## 📸 Screenshot Checklist
+## 📸 Screenshots
 
-Save all captures in the repo under `assets/screenshots/` so they travel with the codebase.
+### Admin Dashboard (React)
 
-- **Admin Dashboard (React)** — screenshots stored in `assets/`
-   - Login: ![Admin - Login](assets/Screenshot%202026-01-14%20185311.png)
-   - Dashboard overview (stats/charts): ![Admin - Dashboard](assets/Screenshot%202026-01-14%20185406.png)
-   - File upload flow: ![Admin - File Upload](assets/Screenshot%202026-01-14%20185430.png)
-   - Content management table: ![Admin - Content Management](assets/Screenshot%202026-01-14%20185458.png)
-   - User management: ![Admin - User Management](assets/Screenshot%202026-01-14%20185602.png)
-   - Storage/settings panel: ![Admin - Settings](assets/Screenshot%202026-01-14%20185701.png)
+![Admin - Login](assets/Screenshot%202026-01-14%20185311.png)
 
-- **Mobile App (Flutter)** — screenshots stored in `assets/`
-   - Login: ![Mobile - Login](assets/Screenshot%202026-01-14%20185721.png)
-   - Register: ![Mobile - Register](assets/Screenshot%202026-01-14%20185804.png)
-   - Home dashboard: ![Mobile - Home](assets/Screenshot%202026-01-14%20185835.png)
-   - Medical dashboard: ![Mobile - Medical](assets/Screenshot%202026-01-14%20185850.png)
-   - Health metrics details: ![Mobile - Health Metrics](assets/Screenshot%202026-01-14%20185942.png)
-   - Prescriptions list: ![Mobile - Prescriptions](assets/Screenshot%202026-01-14%20190019.png)
-   - Upload prescription flow: ![Mobile - Upload Prescription](assets/Screenshot%202026-01-14%20190035.png)
-   - Education hub: ![Mobile - Education](assets/Screenshot%202026-01-14%20190114.png)
-   - PDF/video lesson view: ![Mobile - Education Content](assets/Screenshot%202026-01-14%20190138.png)
-   - Skills hub: ![Mobile - Skills Hub](assets/Screenshot%202026-01-14%20190153.png)
-   - Skill category list: ![Mobile - Skill Category](assets/Screenshot%202026-01-14%20190205.png)
-   - Skill content/video player: ![Mobile - Skill Content](assets/Screenshot%202026-01-14%20190244.png)
-   - Nutrition hub: ![Mobile - Nutrition](assets/Screenshot%202026-01-14%20190258.png)
-   - Nutrition detail/video: ![Mobile - Nutrition Content](assets/Screenshot%202026-01-14%20190316.png)
-   - Events list: ![Mobile - Events](assets/Screenshot%202026-01-14%20190328.png)
-   - Event detail: ![Mobile - Event Detail](assets/Screenshot%202026-01-14%20190344.png)
-   - Chat list: ![Mobile - Chat List](assets/Screenshot%202026-01-14%20190433.png)
-   - Notifications: ![Mobile - Notifications](assets/Screenshot%202026-01-14%20190523.png)
-   - Admin dashboard: ![Mobile - Admin Dashboard](assets/Screenshot%202026-01-14%20190657.png)
-   - Doctor dashboard: ![Mobile - Doctor Dashboard](assets/Screenshot%202026-01-14%20190812.png)
+![Admin - Dashboard](assets/Screenshot%202026-01-14%20185406.png)
+
+![Admin - File Upload](assets/Screenshot%202026-01-14%20185430.png)
+
+![Admin - Content Management](assets/Screenshot%202026-01-14%20185458.png)
+
+![Admin - User Management](assets/Screenshot%202026-01-14%20185602.png)
+
+![Admin - Settings](assets/Screenshot%202026-01-14%20185701.png)
+
+### Mobile App (Flutter)
+
+![Mobile - Login](assets/Screenshot%202026-01-14%20185721.png)
+
+![Mobile - Register](assets/Screenshot%202026-01-14%20185804.png)
+
+![Mobile - Home](assets/Screenshot%202026-01-14%20185835.png)
+
+![Mobile - Medical](assets/Screenshot%202026-01-14%20185850.png)
+
+![Mobile - Health Metrics](assets/Screenshot%202026-01-14%20185942.png)
+
+![Mobile - Prescriptions](assets/Screenshot%202026-01-14%20190019.png)
+
+![Mobile - Upload Prescription](assets/Screenshot%202026-01-14%20190035.png)
+
+![Mobile - Education](assets/Screenshot%202026-01-14%20190114.png)
+
+![Mobile - Education Content](assets/Screenshot%202026-01-14%20190138.png)
+
+![Mobile - Skills Hub](assets/Screenshot%202026-01-14%20190153.png)
+
+![Mobile - Skill Category](assets/Screenshot%202026-01-14%20190205.png)
+
+![Mobile - Skill Content](assets/Screenshot%202026-01-14%20190244.png)
+
+![Mobile - Nutrition](assets/Screenshot%202026-01-14%20190258.png)
+
+![Mobile - Nutrition Content](assets/Screenshot%202026-01-14%20190316.png)
+
+![Mobile - Events](assets/Screenshot%202026-01-14%20190328.png)
+
+![Mobile - Event Detail](assets/Screenshot%202026-01-14%20190344.png)
+
+![Mobile - Chat List](assets/Screenshot%202026-01-14%20190433.png)
+
+![Mobile - Notifications](assets/Screenshot%202026-01-14%20190523.png)
+
+![Mobile - Admin Dashboard](assets/Screenshot%202026-01-14%20190657.png)
+
+![Mobile - Doctor Dashboard](assets/Screenshot%202026-01-14%20190812.png)
 
 Tip: keep filenames kebab-case (as above) and capture one image per bullet so broken links make it obvious what still needs a screenshot.
 
