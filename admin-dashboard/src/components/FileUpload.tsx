@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FiUpload, FiLoader } from 'react-icons/fi';
 import toast from 'react-hot-toast';
-import { api } from '../../lib/api';
+import { api } from '../lib/api';
 import './FileUpload.css';
 
 export const FileUpload: React.FC = () => {
