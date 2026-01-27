@@ -585,7 +585,7 @@ flutter devices
 static const String baseUrl = 'http://192.168.1.100:3000/api';
 
 # Run app
-flutter run -d <device-id>
+flutter run -d chrome --web-port=8080
 ```
 
 **Physical iOS Device**
