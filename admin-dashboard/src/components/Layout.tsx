@@ -1,6 +1,6 @@
 import React from 'react';
 import { FiMenu, FiX, FiLogOut, FiSettings } from 'react-icons/fi';
-import { useUIStore, useAuthStore } from '../../store';
+import { useUIStore, useAuthStore } from '../store';
 import './Layout.css';
 
 interface LayoutProps {
