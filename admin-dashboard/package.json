@@ -4,22 +4,24 @@
   "description": "Admin Dashboard for Swasth aur Abhiman Platform",
   "private": true,
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.16.0",
+    "ajv": "^8.17.1",
     "axios": "^1.5.0",
     "chart.js": "^4.4.0",
+    "date-fns": "^2.30.0",
+    "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
-    "react-icons": "^4.11.0",
-    "zustand": "^4.4.0",
+    "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
-    "date-fns": "^2.30.0"
+    "react-icons": "^4.11.0",
+    "react-router-dom": "^6.16.0",
+    "recharts": "^3.7.0",
+    "zustand": "^4.4.0"
   },
   "devDependencies": {
-    "react-scripts": "5.0.1",
+    "@types/node": "^20.0.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
-    "@types/node": "^20.0.0",
+    "react-scripts": "5.0.1",
     "typescript": "^5.2.0"
   },
   "scripts": {
