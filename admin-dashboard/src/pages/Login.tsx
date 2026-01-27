@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { useAuthStore } from '../../store';
-import { initializeAPI, api } from '../../lib/api';
+import { useAuthStore } from '../store';
+import { initializeAPI, api } from '../lib/api';
 import './Login.css';
 
 export const Login: React.FC = () => {
