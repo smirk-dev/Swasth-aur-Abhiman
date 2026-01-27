@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import { useUIStore } from '../../store';
-import { api } from '../../lib/api';
+import { useUIStore } from '../store';
+import { api } from '../lib/api';
 import './Settings.css';
 
 export const Settings: React.FC = () => {
