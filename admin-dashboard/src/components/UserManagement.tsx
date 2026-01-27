@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { api } from '../../lib/api';
+import { api } from '../lib/api';
 import './UserManagement.css';
 
 interface User {
@@ -48,7 +48,7 @@ export const UserManagement: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure?')) return;
+    if (!window.confirm('Are you sure?')) return;
     try {
       await api.deleteUser(id);
       toast.success('User deleted');
