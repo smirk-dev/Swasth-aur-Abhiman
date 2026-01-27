@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiEdit2, FiTrash2, FiEye } from 'react-icons/fi';
 import toast from 'react-hot-toast';
-import { api } from '../../lib/api';
+import { api } from '../lib/api';
 import './ContentManagement.css';
 
 interface MediaItem {
@@ -39,7 +39,7 @@ export const ContentManagement: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure?')) return;
+    if (!window.confirm('Are you sure?')) return;
     try {
       await api.deleteMedia(id);
       toast.success('Deleted successfully');
